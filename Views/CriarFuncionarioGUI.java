@@ -1,4 +1,6 @@
 package Views;
+import Controllers.FarmaciaCtrl;
+import Controllers.FuncionarioCtrl;
 import Controllers.SindicoCtrl;
 
 public class CriarFuncionarioGUI extends javax.swing.JFrame {
@@ -13,38 +15,52 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        cxCPF = new javax.swing.JTextField();
+        cxNome = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        cxFuncao = new javax.swing.JTextField();
+        cxIdade = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        cxTurno = new javax.swing.JComboBox<>();
+        cxGenero = new javax.swing.JComboBox<>();
         btnCriarFuncionario = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        cxSalario = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbSetores = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        cxSetor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
         jLabel1.setText("CRIAR FUNCIONÁRIO");
 
-        jLabel3.setText("CPF:");
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel3.setText("Nome:");
 
-        cxCPF.addActionListener(new java.awt.event.ActionListener() {
+        cxNome.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cxNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cxCPFActionPerformed(evt);
+                cxNomeActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Função");
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel6.setText("Idade:");
 
-        jLabel7.setText("Condomino:");
+        cxIdade.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
 
-        cxTurno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Manhã", "Tarde", "Noite" }));
-        cxTurno.addActionListener(new java.awt.event.ActionListener() {
+        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel7.setText("Salário:");
+
+        cxGenero.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Feminino", "Outros" }));
+        cxGenero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cxTurnoActionPerformed(evt);
+                cxGeneroActionPerformed(evt);
             }
         });
 
+        btnCriarFuncionario.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnCriarFuncionario.setText("Criar Funcionário");
         btnCriarFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -52,7 +68,54 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
             }
         });
 
+        btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel8.setText("Gênero:");
+
+        cxSalario.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cxSalario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cxSalarioActionPerformed(evt);
+            }
+        });
+
+        tbSetores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Id", "Setor", "Funcionarios"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tbSetores);
+
+        jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel9.setText("Id Setor:");
+
+        cxSetor.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cxSetor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cxSetorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,34 +124,41 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnVoltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cxTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(btnCriarFuncionario))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cxIdade)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cxNome)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 101, Short.MAX_VALUE)
-                                .addComponent(btnVoltar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCriarFuncionario))
+                                .addGap(0, 30, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addGap(85, 85, 85))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(cxCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cxFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cxSalario))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cxSetor)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,16 +168,27 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(cxCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cxNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cxFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(cxIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(cxTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cxSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(cxSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarFuncionario)
                     .addComponent(btnVoltar))
@@ -117,35 +198,46 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cxCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxCPFActionPerformed
+    private void cxNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxNomeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cxCPFActionPerformed
+    }//GEN-LAST:event_cxNomeActionPerformed
 
-    private void cxTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxTurnoActionPerformed
+    private void cxGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxGeneroActionPerformed
         
-    }//GEN-LAST:event_cxTurnoActionPerformed
+    }//GEN-LAST:event_cxGeneroActionPerformed
 
     private void btnCriarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarFuncionarioActionPerformed
-        if(criarFuncionario()){
-            fechaAtual();
-            abreHomeSindico();
-        }
+        criarFarmacia();
     }//GEN-LAST:event_btnCriarFuncionarioActionPerformed
+
+    private void cxSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSalarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cxSalarioActionPerformed
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        fechaAtual();
+        FuncionariosGUI funcionarios = new FuncionariosGUI();
+        funcionarios.setVisible(true);
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void cxSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSetorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cxSetorActionPerformed
 
     public void fechaAtual(){
         this.dispose();
     }
     
-    public void abreHomeSindico(){
-        HomeSindicoGUI abreHomeSindico = new HomeSindicoGUI();
-        abreHomeSindico.setVisible(true); 
+    public void criarFarmacia(){
+        String generoSelecionado = (String) cxGenero.getSelectedItem();
+        FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
+        
+        if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), generoSelecionado, cxSalario.getText(), cxSetor.getText())){
+            System.out.println("Funcionario cadastrado");
+            this.dispose();
+        }
     }
-    
-    public boolean criarFuncionario(){
-        String turno = (String) cxTurno.getSelectedItem();
-        SindicoCtrl sindicoCtrl = new SindicoCtrl();
-        return sindicoCtrl.criarFuncionario(cxCPF.getText(), cxFuncao.getText(), turno);
-    }
+   
     
     
     public static void main(String args[]) {
@@ -159,13 +251,19 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCriarFuncionario;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JTextField cxCPF;
-    private javax.swing.JTextField cxFuncao;
-    private javax.swing.JComboBox<String> cxTurno;
+    private javax.swing.JComboBox<String> cxGenero;
+    private javax.swing.JTextField cxIdade;
+    private javax.swing.JTextField cxNome;
+    private javax.swing.JTextField cxSalario;
+    private javax.swing.JTextField cxSetor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbSetores;
     // End of variables declaration//GEN-END:variables
 
 }

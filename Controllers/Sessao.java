@@ -1,28 +1,17 @@
 package Controllers;
 
 public class Sessao {
-    private static String cpfUsuarioLogado;
-    private static int tipoUsuario; 
-    //1 = Síndico, 2 = Funcionário, 3 = Condômino, 4 = Visitante
+    private static int idFarmacia;
 
-    public static String getCpfUsuarioLogado() {
-        return cpfUsuarioLogado;
+    public static int getIdFarmacia() {
+        return idFarmacia;
     }
 
-    public static void setCpfUsuarioLogado(String cpf) {
-        cpfUsuarioLogado = cpf;
-    }
-
-    public static int getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public static void setTipoUsuario(int tipo) {
-        tipoUsuario = tipo;
+    public static void setIdFarmacia(int id) {
+        idFarmacia = id;
     }
     
     public static void limparSessao() {
-        cpfUsuarioLogado = null;
-        tipoUsuario = 0;
+        idFarmacia = 0;
     }
 }

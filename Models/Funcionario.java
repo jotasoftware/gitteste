@@ -1,28 +1,106 @@
 package Models;
 
-public class Funcionario extends Pessoa{
-    private String cargoFuncionario;
-    private String turnoFuncionario;
+public class Funcionario {
 
-    public Funcionario() {
-        this.cargoFuncionario = "";
-        this.turnoFuncionario = "";
+    private String nome;
+    private int id;
+    private int idade;
+    private Genero genero;
+    private double salario;
+    private String cnpjFarmacia;
+    private int idSetor;
+
+
+    public Funcionario(String nome, int idade, double salario, Genero genero, int idSetor) {
+
+        this.nome = nome;
+        this.id = 0;
+        this.idade = idade;
+        this.genero = genero;
+        this.salario = salario;
+        this.idSetor = idSetor;
+        
+    }
+    
+    public String getCnpjFarmacia() {
+        
+        return cnpjFarmacia;
+
     }
 
-    public String getCargoFuncionario() {
-        return cargoFuncionario;
+    public void setNome(String nome) {
+        
+        this.nome = nome;
+        
     }
 
-    public void setCargoFuncionario(String cargoFuncionario) {
-        this.cargoFuncionario = cargoFuncionario;
+    public String getNome() {
+        
+        return nome;
+
     }
 
-    public String getTurnoFuncionario() {
-        return turnoFuncionario;
+    public void setID(int id) {
+
+        this.id = id;
+
     }
 
-    public void setTurnoFuncionario(String turnoFuncionario) {
-        this.turnoFuncionario = turnoFuncionario;
+    public int getID() {
+
+        return id;
+
     }
+
+    public void setIdade(int idade) {
+
+        this.idade = idade;
+
+    }
+
+    public int getIdade() {
+
+        return idade;
+
+    }
+
+    public void setGenero(Genero genero) {
+
+        this.genero = genero;
+
+    }
+
+
+    public Genero getGenero() {
+
+        return genero;
+
+    }
+
+    public void setSalario(double salario) {
+    
+        this.salario = salario;
+
+    }
+
+    public double getSalario() {
+
+        return salario;
+
+    }
+
+    public void setIdSetor(int idSetor) {
+    
+        this.idSetor = idSetor;
+
+    }
+
+    public int getIdSetor() {
+
+        return idSetor;
+
+    }
+
+
     
 }
