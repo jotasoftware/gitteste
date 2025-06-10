@@ -3,15 +3,15 @@ package Models;
 import java.util.List;
 
 public class Setor {
-    private String cnpjFarmacia;
+    private int idFarmacia;
     private String nome;
     private double valeTransporte;
     private double valeRefeicao;
     private double valeAlimentacao;
     private double planoSaude;
 
-    public String getCnpjFarmacia() {
-        return cnpjFarmacia;
+    public int getIdFarmacia() {
+        return idFarmacia;
     }
 
     public String getNome() {
@@ -34,8 +34,8 @@ public class Setor {
         return planoSaude;
     }
 
-    public void setCnpjFarmacia(String cnpjFarmacia) {
-        this.cnpjFarmacia = cnpjFarmacia;
+    public void setidFarmacia(int idFarmacia) {
+        this.idFarmacia = idFarmacia;
     }
 
     public void setNome(String nome) {
@@ -59,9 +59,9 @@ public class Setor {
     }
 
 
-    public Setor(String cnpjFarmacia, String nome, double valeTransporte, double valeRefeicao,
+    public Setor(int idFarmacia, String nome, double valeTransporte, double valeRefeicao,
                  double valeAlimentacao, double planoSaude) {
-        this.cnpjFarmacia = cnpjFarmacia;
+        this.idFarmacia = idFarmacia;
         this.nome = nome;
         this.valeTransporte = valeTransporte;
         this.valeRefeicao = valeRefeicao;

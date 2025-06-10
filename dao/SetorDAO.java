@@ -1,16 +1,16 @@
 package dao;
 
-import Models.Produto;
+import Models.Setor;
 import java.sql.*;
 
-public class ProdutoDAO {
+public class SetorDAO {
     static Connection con = null;
     static String url = "jdbc:postgresql://localhost:5432/smartcondo";
     static String driver = "org.postgresql.Driver";
     static String usuario = "postgres";
     static String senha = "niver2500";
     
-    public void criarProduto(Produto produto){
+    public void criarSetor(Setor setor){
         Connection con = null;
         PreparedStatement p = null;
         
@@ -22,13 +22,14 @@ public class ProdutoDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO \"Produto\" (\"nomeProduto\", \"valorVenda\", \"valorCusto\", \"idFarmacia\", \"quantidade\") VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO \"Setor\" (\"nomeProduto\", \"valeTransporte\", \"valeRefeicao\", \"valeAlimentacao\", \"planoSaude\", \"idFarmacia\") VALUES (?, ?, ?, ?, ?)";
             p = con.prepareStatement(sql);
-            p.setString(1, produto.getNomeProduto());
-            p.setDouble(2, produto.getValorVenda());
-            p.setDouble(3, produto.getValorCusto());
-            p.setInt(4, produto.getidFarmacia());
-            p.setInt(5, produto.getQtdProduto());
+            p.setString(1, setor.getNome());
+            p.setDouble(2, setor.getValeTransporte());
+            p.setDouble(3, setor.getValeRefeicao());
+            p.setDouble(4, setor.getValeAlimentacao());
+            p.setDouble(5, setor.getPlanoSaude());
+            p.setInt(6, setor.getIdFarmacia());
 
             p.execute();
             p.close();
