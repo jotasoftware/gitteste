@@ -64,7 +64,7 @@ public class FarmaciaDAO {
     }
     
     
-    public ArrayList<CompraListagemDTO> listarComprasCnpj(int id) {
+    public ArrayList<CompraListagemDTO> listarComprasCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -73,27 +73,25 @@ public class FarmaciaDAO {
         try {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = "SELECT " +
-                        "    C.\"idCompra\", " +
-                        "    F.\"nomeCompleto\" AS \"nomeFuncionario\", " +
-                        "    C.\"dataCompra\", " +
-                        "    SUM(CP.\"qtdCompraProduto\") AS \"quantidadeProdutos\", " +
-                        "    C.\"totalCompra\" " +
-                        "FROM " +
-                        "    \"Compra\" C " +
-                        "JOIN " +
-                        "    \"Funcionario\" F ON C.\"idFuncionario\" = F.\"idFuncionario\" " +
-                        "JOIN " +
-                        "    \"CompraProdutos\" CP ON C.\"idCompra\" = CP.\"idCompra\" " +
-                        "JOIN " +
-                        "    \"Farmacia\" Fa ON C.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-                        "WHERE " +
-                        "    Fa.\"cnpj\" = ? " +
-                        "GROUP BY " +
-                        "    C.\"idCompra\", F.\"nomeCompleto\", C.\"dataCompra\", C.\"totalCompra\" " +
-                        "ORDER BY " +
-                        "    C.\"dataCompra\" DESC";
-            p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+                    "    C.\"idCompra\", " +
+                    "    F.\"nomeCompleto\" AS \"nomeFuncionario\", " +
+                    "    C.\"dataCompra\", " +
+                    "    SUM(CP.\"qtdCompraProduto\") AS \"quantidadeProdutos\", " +
+                    "    C.\"totalCompra\" " +
+                    "FROM " +
+                    "    \"Compra\" C " +
+                    "JOIN " +
+                    "    \"Funcionario\" F ON C.\"idFuncionario\" = F.\"idFuncionario\" " +
+                    "JOIN " +
+                    "    \"CompraProdutos\" CP ON C.\"idCompra\" = CP.\"idCompra\" " +
+                    "WHERE " +
+                    "    C.\"idFarmacia\" = ? " +
+                    "GROUP BY " +
+                    "    C.\"idCompra\", F.\"nomeCompleto\", C.\"dataCompra\", C.\"totalCompra\" " +
+                    "ORDER BY " +
+                    "    C.\"dataCompra\" DESC";
+        p = con.prepareStatement(sql);
+        p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 CompraListagemDTO compra = new CompraListagemDTO();
@@ -120,7 +118,7 @@ public class FarmaciaDAO {
         return compras;
     }
     
-    public ArrayList<VendaListagemDTO> listarVendasCnpj(int id) {
+    public ArrayList<VendaListagemDTO> listarVendasCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -140,17 +138,15 @@ public class FarmaciaDAO {
                         "    \"Funcionario\" F ON V.\"idFuncionario\" = F.\"idFuncionario\" " +
                         "JOIN " +
                         "    \"VendaProdutos\" VP ON V.\"idVenda\" = VP.\"idVenda\" " +
-                        "JOIN " +
-                        "    \"Farmacia\" Fa ON V.\"idFarmacia\" = Fa.\"idFarmacia\" " +
                         "WHERE " +
-                        "    Fa.\"cnpj\" = ? " +
+                        "    V.\"idFarmacia\" = ? " +
                         "GROUP BY " +
                         "    V.\"idVenda\", F.\"nomeCompleto\", V.\"dataVenda\", V.\"totalVenda\" " +
                         "ORDER BY " +
                         "    V.\"dataVenda\" DESC";
-
+        
             p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+            p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 VendaListagemDTO venda = new VendaListagemDTO();
@@ -178,7 +174,7 @@ public class FarmaciaDAO {
         return vendas;
     }
     
-     public ArrayList<LucroMensalDTO> listarLucrosMensaisCnpj(int id) {
+     public ArrayList<LucroMensalDTO> listarLucrosMensaisCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -219,10 +215,10 @@ public class FarmaciaDAO {
                         "FROM " +
                         "    \"Farmacia\" Fa " +
                         "WHERE " +
-                        "    Fa.\"cnpj\" = ?";
-
+                        "    Fa.\"idFarmacia\" = ?";
+        
             p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+            p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 LucroMensalDTO lucroMensal = new LucroMensalDTO();
@@ -251,7 +247,7 @@ public class FarmaciaDAO {
      
      
     //verificar dados no bd
-    public ArrayList<Produto> listarProdutosCnpj(int id) {
+    public ArrayList<Produto> listarProdutosCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -259,10 +255,10 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-             String sql = "SELECT \"id\", \"nomeProduto\", \"valorVenda\", \"valorCusto\", \"cnpjFarmacia\", \"quantidade\" " +
-                     "FROM \"Produto\" WHERE \"cnpjFarmacia\" = ?";
+            String sql = "SELECT \"id\", \"nomeProduto\", \"valorVenda\", \"valorCusto\", \"idFarmacia\", \"quantidade\" " +
+                         "FROM \"Produto\" WHERE \"idFarmacia\" = ?";
             p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+            p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 Produto produto = new Produto();
@@ -289,7 +285,7 @@ public class FarmaciaDAO {
         return produtos;
     }
     
-    public ArrayList<SetorListagemDTO> listarSetoresCnpj(int id) {
+    public ArrayList<SetorListagemDTO> listarSetoresCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -313,14 +309,12 @@ public class FarmaciaDAO {
                         + "    \"Funcionario\" F "
                         + "JOIN "
                         + "    \"Setor\" S ON F.\"idSetor\" = S.\"idSetor\" "
-                        + "JOIN "
-                        + "    \"Farmacia\" Fa ON F.\"idFarmacia\" = Fa.\"idFarmacia\" "
                         + "WHERE "
-                        + "    Fa.\"cnpj\" = ? "
+                        + "    F.\"idFarmacia\" = ? "
                         + "ORDER BY "
                         + "    S.\"nome\", F.\"nomeCompleto\"";
             p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+            p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 SetorListagemDTO setor = new SetorListagemDTO();
@@ -349,7 +343,7 @@ public class FarmaciaDAO {
         return setores;
     }
     
-    public ArrayList<FuncionarioListagemDTO> listarFuncionariosCnpj(int id) {
+    public ArrayList<FuncionarioListagemDTO> listarFuncionariosCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -357,23 +351,21 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-             String sql = "SELECT " +
-             "    Fc.\"idFuncionario\", " +
-             "    Fc.\"nomeCompleto\", " +
-             "    S.\"nome\", " +
-             "    Fc.\"salarioBase\" " +
-             "FROM " +
-             "    \"Funcionario\" Fc " +
-             "JOIN " +
-             "    \"Setor\" S ON Fc.\"idSetor\" = S.\"idSetor\" " +
-             "JOIN " +
-             "    \"Farmacia\" Fa ON Fc.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-             "WHERE " +
-             "    Fa.\"cnpj\" = ? " +
-             "ORDER BY " +
-             "    Fc.\"nomeCompleto\"";
+            String sql = "SELECT " +
+                         "    Fc.\"idFuncionario\", " +
+                         "    Fc.\"nomeCompleto\", " +
+                         "    S.\"nome\", " +
+                         "    Fc.\"salarioBase\" " +
+                         "FROM " +
+                         "    \"Funcionario\" Fc " +
+                         "JOIN " +
+                         "    \"Setor\" S ON Fc.\"idSetor\" = S.\"idSetor\" " +
+                         "WHERE " +
+                         "    Fc.\"idFarmacia\" = ? " +
+                         "ORDER BY " +
+                         "    Fc.\"nomeCompleto\"";
             p = con.prepareStatement(sql);
-            p.setString(1, cnpj);
+            p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 FuncionarioListagemDTO funcionario = new FuncionarioListagemDTO();
