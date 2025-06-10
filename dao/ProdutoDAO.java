@@ -22,12 +22,12 @@ public class ProdutoDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO \"Produto\" (\"nomeProduto\", \"valorVenda\", \"valorCusto\", \"cnpjFarmacia\", \"quantidade\") VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO \"Produto\" (\"nomeProduto\", \"valorVenda\", \"valorCusto\", \"idFarmacia\", \"quantidade\") VALUES (?, ?, ?, ?, ?)";
             p = con.prepareStatement(sql);
             p.setString(1, produto.getNomeProduto());
             p.setDouble(2, produto.getValorVenda());
             p.setDouble(3, produto.getValorCusto());
-            p.setString(4, produto.getCnpjFarmacia());
+            p.setString(4, produto.getidFarmacia());
             p.setInt(5, produto.getQtdProduto());
 
             p.execute();
