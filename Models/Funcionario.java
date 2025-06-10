@@ -7,7 +7,7 @@ public class Funcionario {
     private int idade;
     private Genero genero;
     private double salario;
-    private String cnpjFarmacia;
+    private int idFarmacia;
     private int idSetor;
 
 
@@ -22,9 +22,9 @@ public class Funcionario {
         
     }
     
-    public String getCnpjFarmacia() {
+    public int getIdFarmacia() {
         
-        return cnpjFarmacia;
+        return idFarmacia;
 
     }
 
