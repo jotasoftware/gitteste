@@ -4,6 +4,7 @@ import Models.*;
 import utils.ValidadorCNPJ;
 import dao.*;
 import dto.*;
+
 import java.util.ArrayList;
 
 public class FarmaciaCtrl {
@@ -46,15 +47,15 @@ public class FarmaciaCtrl {
     
     public ArrayList<FuncionarioListagemDTO> listarFuncionarios() {
 
-        return dao.listarSetoresCnpj(Sessao.getIdFarmaciaLogada());
+        return dao.listarFuncionariosCnpj(Sessao.getIdFarmaciaLogada());
 
     }
 
-    public ArrayList<Transportadora> listaTransportadoras() {
-
-        return dao.listarTransportadorasCnpj(Sessao.getIdFarmaciaLogada());
-
-    }
+//    public ArrayList<Transportadora> listaTransportadoras() {
+//
+//        return dao.listarTransportadorasCnpj(Sessao.getIdFarmaciaLogada());
+//
+//    }
 
     public ArrayList<CompraListagemDTO> listarCompras() {
 

@@ -1,12 +1,16 @@
 package Views;
 import Controllers.FarmaciaCtrl;
 import Controllers.FuncionarioCtrl;
-import Controllers.SindicoCtrl;
+import dto.SetorListagemDTO;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 public class CriarFuncionarioGUI extends javax.swing.JFrame {
+    private ArrayList<SetorListagemDTO> setores;
 
     public CriarFuncionarioGUI() {
         initComponents();
+        populaTabelaSetores();
     }
 
     @SuppressWarnings("unchecked")
@@ -228,10 +232,25 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         this.dispose();
     }
     
+    private void populaTabelaSetores() {
+        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
+        setores = farmaciaCtrl.listarSetores();
+        DefaultTableModel model1 = (DefaultTableModel) tbSetores.getModel();
+        model1.setRowCount(0);
+        for (SetorListagemDTO setor : setores) {
+            model1.addRow(new Object[] {
+                setor.getId(),
+                setor.getNome(),
+                setor.getQtdFuncionarios(),
+            });
+        }
+        
+    }
+    
     public void criarFarmacia(){
         String generoSelecionado = (String) cxGenero.getSelectedItem();
         FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
-        
+
         if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), generoSelecionado, cxSalario.getText(), cxSetor.getText())){
             System.out.println("Funcionario cadastrado");
             this.dispose();

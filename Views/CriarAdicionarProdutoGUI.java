@@ -1,10 +1,20 @@
 package Views;
+import Controllers.FarmaciaCtrl;
 import Controllers.SindicoCtrl;
+import Models.Produto;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
+    List<Produto> produtos = new ArrayList<>();
 
-    public CriarAdicionarProdutoGUI() {
+    public CriarAdicionarProdutoGUI(int tipo) {
         initComponents();
+        if(tipo ==1){
+            populaComboBoxCompra();
+        }else{
+            populaComboBoxVenda();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -15,7 +25,7 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         btnAddProduto = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
-        jComboBoxProdutos = new javax.swing.JComboBox<>();
+        comboBoxProdutos = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jTextQuantidade = new javax.swing.JTextField();
 
@@ -38,10 +48,10 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
         btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnVoltar.setText("Voltar");
 
-        jComboBoxProdutos.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jComboBoxProdutos.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxProdutos.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        comboBoxProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxProdutosActionPerformed(evt);
+                comboBoxProdutosActionPerformed(evt);
             }
         });
 
@@ -65,7 +75,7 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxProdutos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(comboBoxProdutos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 257, Short.MAX_VALUE)
                         .addComponent(btnVoltar)
@@ -85,7 +95,7 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBoxProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -101,36 +111,46 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProdutoActionPerformed
-        if(criarFuncionario()){
-            fechaAtual();
-            abreHomeSindico();
-        }
+        adicionarProduto(); //trabalhar nisso 
     }//GEN-LAST:event_btnAddProdutoActionPerformed
 
-    private void jComboBoxProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxProdutosActionPerformed
+    private void comboBoxProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxProdutosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxProdutosActionPerformed
+    }//GEN-LAST:event_comboBoxProdutosActionPerformed
 
     public void fechaAtual(){
         this.dispose();
     }
     
-    public void abreHomeSindico(){
-        HomeSindicoGUI abreHomeSindico = new HomeSindicoGUI();
-        abreHomeSindico.setVisible(true); 
+    public void populaComboBoxCompra(){
+        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
+        produtos = farmaciaCtrl.listarProdutos();
+        comboBoxProdutos.removeAllItems();
+
+        for (Produto produto : produtos) {
+            comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto() + " unidades");
+        }
     }
     
-    public boolean criarFuncionario(){
-        String turno = (String) cxSexo.getSelectedItem();
-        SindicoCtrl sindicoCtrl = new SindicoCtrl();
-        return sindicoCtrl.criarFuncionario(cxNome.getText(), cxIdade.getText(), turno);
+    public void populaComboBoxVenda(){
+        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
+        produtos = farmaciaCtrl.listarProdutos();
+        comboBoxProdutos.removeAllItems();
+
+        for (Produto produto : produtos) {
+            if(produto.getQtdProduto() > 0){
+                comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto()+ " unidades"); // ou produto.getNome()
+            }
+            
+        }
     }
+   
     
     
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CriarAdicionarProdutoGUI().setVisible(true);
+                new CriarAdicionarProdutoGUI(1).setVisible(true);
             }
         });
     }
@@ -138,7 +158,7 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProduto;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JComboBox<String> jComboBoxProdutos;
+    private javax.swing.JComboBox<String> comboBoxProdutos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

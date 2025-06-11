@@ -12,7 +12,7 @@ public class FarmaciaDAO {
     static String usuario = "postgres";
     static String senha = "niver2500";
     
-    public void adicionar(Farmacia farmacia){
+     public boolean adicionar(Farmacia farmacia){
         Connection con = null;
         PreparedStatement p = null;
         
@@ -32,8 +32,10 @@ public class FarmaciaDAO {
             p.execute();
             p.close();
             con.close();
+            return true;
         } catch (Exception e) {
             System.out.println("Falha na inserção: " + e.getMessage());
+            return false;
         }
         
     }
@@ -46,12 +48,12 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "SELECT id FROM \"Famacia\" WHERE cnpj = ?";
+            String sql = "SELECT idFarmacia FROM \"farmacia\" WHERE cnpj = ?";
             p = con.prepareStatement(sql);
-            p.setLong(1, Long.parseLong(cnpj));
+            p.setString(1, cnpj);
             rs = p.executeQuery();
             if (rs.next()) { 
-                id = rs.getInt("id");
+                id = rs.getInt("idFarmacia");
             }
             rs.close();
             p.close();
@@ -62,6 +64,7 @@ public class FarmaciaDAO {
 
         return id;
     }
+    
     
     
     public ArrayList<CompraListagemDTO> listarComprasCnpj(int idFarmacia) {
@@ -295,6 +298,7 @@ public class FarmaciaDAO {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = ""
                         + "SELECT "
+                        + "    S.\"idSetor\", "
                         + "    S.\"nome\", "
                         + "    COUNT(F.\"idFuncionario\") OVER (PARTITION BY S.\"idSetor\") AS totalFuncionariosSetor, "
                         + "    F.\"idFuncionario\", "
@@ -318,6 +322,7 @@ public class FarmaciaDAO {
             rs = p.executeQuery();
             while (rs.next()) {
                 SetorListagemDTO setor = new SetorListagemDTO();
+                setor.setId(rs.getInt("idSetor"));
                 setor.setNome(rs.getString("nome"));
                 setor.setValeTransporte(rs.getDouble("valeTransporte"));
                 setor.setValeAlimentacao(rs.getDouble("valeAlimentacao"));

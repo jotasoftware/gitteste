@@ -103,10 +103,10 @@ public class LoginGUI extends javax.swing.JFrame {
             //TODO fazer tratamento de erro aqui
             return;
         }
-        if (farmaciaCtrl.verificarFarmacia(cxCNPJ.getText())) {
+        int id = farmaciaCtrl.verificarFarmacia(cxCNPJ.getText());
+        if (id != -1) {
             this.dispose();
-            Sessao.setCnpjFarmaciaLogada(cxCNPJ.getText());
-            Sessao.setIdFrmacia(WIDTH);
+            Sessao.setIdFamaciaLogada(id);
             abreHomeFarmacia();
         }else{
             JOptionPane.showMessageDialog(this, "CNPJ não encontrado.", "Erro", 0);

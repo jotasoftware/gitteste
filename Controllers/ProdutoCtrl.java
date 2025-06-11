@@ -25,8 +25,10 @@ public class ProdutoCtrl {
                 return false;
             }
 
-            Produto produto = new Produto(Sessao.getCnpjFarmaciaLogada(), nomeProduto, valorVendaDouble, valorCompraDouble);
-            return dao.criarProduto(produto);
+            Produto produto = new Produto(Sessao.getIdFarmaciaLogada(), nomeProduto, valorVendaDouble, valorCompraDouble);
+           
+            dao.criarProduto(produto);
+            return true;
 
         } catch (NumberFormatException e) {
             System.out.println("Erro ao converter valores: " + e.getMessage());

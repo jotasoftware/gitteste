@@ -2,10 +2,7 @@ package Controllers;
 
 import Models.Funcionario;
 import Models.Genero;
-import Projeto.models.Setor;
-import Projeto.models.Transportadora;
-import Projeto.utils.ValidadorCNPJ;
-import java.util.ArrayList;
+import dao.FuncionarioDAO;
 
 
 public class FuncionarioCtrl {
@@ -18,31 +15,15 @@ public class FuncionarioCtrl {
 
     }
     
-    public boolean salvar(Funcionario Funcionario) {
 
-        if (Funcionario.getNome() == null || Funcionario.getNome().isEmpty() || 
-            Funcionario.getIdade() == 0 ||  Funcionario.getSalario() == 0 ){
-
-                return false;
-
-            }
-
-
-            boolean sucesso = dao.adicionar(Funcionario);
-            
-    }
-
-    public boolean verificarFuncionario(String cnpjFuncionario) {
-
-        return dao.verificarCnpj(cnpjFuncionario);
+    public boolean cadastrar(String nome, String idade, String salario, String genero, String idSetor) {
         
-    }
-    
-
-    public boolean cadastrar(String nome, int idade, double salario, String genero, int idSetor) {
+        int idadeInt = Integer.parseInt(idade);
+        double salarioDouble = Double.parseDouble(salario);
+        int setorInt = Integer.parseInt(idSetor);
         
         if (nome == null || nome.isEmpty() || 
-            idade == 0 ||  salario == 0 ){
+            idadeInt == 0 ||  salarioDouble == 0 ){
 
                 return false;
 
@@ -51,37 +32,13 @@ public class FuncionarioCtrl {
         String generoParaEnum = genero.toUpperCase();
         Genero generoEnum = Genero.valueOf(generoParaEnum);
         
-        Funcionario funcionario = new Funcionario(nome, idade, salario, generoEnum, idSetor);
+        Funcionario funcionario = new Funcionario(nome, idadeInt, salarioDouble, generoEnum, setorInt);
        
-        return dao.adicionar(funcionario);
+        dao.adicionar(funcionario);
+        return true;
 
     }
 
-
-    public ArrayList<Setor> listarSetores() {
-
-        return dao.listarSetoresPorFuncionario(Sessao.getCnpjFuncionario());
-
-    }
-
-    public ArrayList<Transportadora> listaTransportadoras() {
-
-        return dao.listarTransportadorasPorFuncionario(Sessao.getCnpjFuncionario());
-
-    }
-
-    public ArrayList<Funcionario> listarFuncionarios() {
-
-        return dao.listarFuncionarios;
-        
-    }
-
-    public ArrayList<Produtos> listarProdutos() {
-
-        return dao.listarProdutos();
-        
-    }
-    
     public double getImposto(double salario) {
         if (salario <= 2428.80 && salario > 0) {
             return 0;

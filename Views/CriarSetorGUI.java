@@ -1,5 +1,6 @@
 package Views;
-import Controllers.SindicoCtrl;
+import Controllers.SetorCtrl;
+import javax.swing.JOptionPane;
 
 public class CriarSetorGUI extends javax.swing.JFrame {
 
@@ -157,10 +158,7 @@ public class CriarSetorGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cxNomeActionPerformed
 
     private void btnCriarSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarSetorActionPerformed
-        if(criarFuncionario()){
-            fechaAtual();
-            abreHomeSindico();
-        }
+        criarProduto();
     }//GEN-LAST:event_btnCriarSetorActionPerformed
 
     private void cxPlanoDeSaudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxPlanoDeSaudeActionPerformed
@@ -170,16 +168,50 @@ public class CriarSetorGUI extends javax.swing.JFrame {
     public void fechaAtual(){
         this.dispose();
     }
-    
-    public void abreHomeSindico(){
-        HomeSindicoGUI abreHomeSindico = new HomeSindicoGUI();
-        abreHomeSindico.setVisible(true); 
-    }
-    
-    public boolean criarFuncionario(){
-        String turno = (String) cxSexo.getSelectedItem();
-        SindicoCtrl sindicoCtrl = new SindicoCtrl();
-        return sindicoCtrl.criarFuncionario(cxNome.getText(), cxValeAlimentacao.getText(), turno);
+        
+    public void criarProduto(){
+        SetorCtrl setorCtrl = new SetorCtrl();
+        
+        String nome = cxNome.getText().trim();
+        String valeTransporte = cxValeTransporte.getText().trim();
+        String valeRefeicao = cxValeRefeicao.getText().trim();
+        String valeAlimentacao = cxValeAlimentacao.getText().trim();
+        String planoDeSaude = cxPlanoDeSaude.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Nome é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (valeTransporte.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Vale Transporte é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (valeRefeicao.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Vale Refeição é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (valeAlimentacao.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Vale Alimentação é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (planoDeSaude.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Plano de Saúde é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        
+        if(setorCtrl.cadastrarSetor(nome, valeTransporte, valeRefeicao, valeAlimentacao, planoDeSaude)){
+            System.out.println("Setor criado");
+            this.dispose();
+            FuncionariosGUI funcionariosGUI = new FuncionariosGUI();
+            funcionariosGUI.setVisible(true);
+        }else{
+            System.out.println("Setor não criado");
+        }
     }
     
     

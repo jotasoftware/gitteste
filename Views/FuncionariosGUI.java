@@ -267,8 +267,9 @@ public class FuncionariosGUI extends javax.swing.JFrame {
             );
 
             if (resposta == JOptionPane.YES_OPTION) {
-                funcionarioCtrl.apagar(funcionario.getIdFuncionario());
-                JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
+                if(funcionarioCtrl.apagar(funcionario.getIdFuncionario())){
+                    JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
+                }
             }
 
         }

@@ -3,14 +3,14 @@ package Models;
 public class Produto {
     
     private int idProduto;
-    private String cnpjFarmacia;
+    private int idFarmacia;
     private String nomeProduto;
     private int qtdProduto;
     private double valorVenda;
     private double valorCusto;
 
-    public Produto(String cnpjFarmacia, String nomeProduto, double valorVenda, double valorCusto) {
-        this.cnpjFarmacia = cnpjFarmacia;
+    public Produto(int idFarmacia, String nomeProduto, double valorVenda, double valorCusto) {
+        this.idFarmacia = idFarmacia;
         this.nomeProduto = nomeProduto;
         this.qtdProduto = 0;
         this.valorVenda = valorVenda;
@@ -19,7 +19,7 @@ public class Produto {
     }
     
     public Produto() {
-        this.cnpjFarmacia = "";
+        this.idFarmacia = 0;
         this.nomeProduto = "";
         this.qtdProduto = 0;
         this.valorVenda = 0;
@@ -33,21 +33,21 @@ public class Produto {
 
     }
     
-    public void setIdProduto(int id) {
+    public void setIdProduto(int idProduto) {
 
         this.idProduto = idProduto;
 
     }
 
-    public String getCnpjFarmacia() {
+    public int getidFarmacia() {
 
-        return cnpjFarmacia;
+        return idFarmacia;
 
     }
     
-    public void setCnpjFarmacia(String cnpjFarmacia) {
+    public void setidFarmacia(int idFarmacia) {
 
-        this.cnpjFarmacia = cnpjFarmacia;
+        this.idFarmacia = idFarmacia;
 
     }
 
@@ -98,5 +98,11 @@ public class Produto {
         
     }
 
+    @Override
+    public String toString() {
+        return this.nomeProduto + " " + this.qtdProduto; // ou qualquer info útil
+    }
+
+    
 
 }

@@ -1,6 +1,7 @@
 package dto;
 
 public class SetorListagemDTO {
+    private int id;
     private String cnpjFarmacia;
     private String nome;
     private double valeTransporte;
@@ -10,6 +11,7 @@ public class SetorListagemDTO {
     private int qtdFuncionarios;
 
     public SetorListagemDTO() {
+        this.id = 0;
         this.cnpjFarmacia = "";
         this.nome = "";
         this.valeTransporte = 0;
@@ -73,5 +75,13 @@ public class SetorListagemDTO {
 
     public void setQtdFuncionarios(int qtdFuncionarios) {
         this.qtdFuncionarios = qtdFuncionarios;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
