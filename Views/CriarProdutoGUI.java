@@ -1,5 +1,6 @@
 package Views;
 import Controllers.ProdutoCtrl;
+import javax.swing.JOptionPane;
 
 public class CriarProdutoGUI extends javax.swing.JFrame {
 
@@ -122,7 +123,7 @@ public class CriarProdutoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cxNomeActionPerformed
 
     private void btnCriarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarProdutoActionPerformed
-
+        criarProduto();
     }//GEN-LAST:event_btnCriarProdutoActionPerformed
 
     public void fechaAtual(){
@@ -132,10 +133,28 @@ public class CriarProdutoGUI extends javax.swing.JFrame {
     public void criarProduto(){
         ProdutoCtrl produtoCtrl = new ProdutoCtrl();
         
+        if (cxNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Nome é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cxValorVenda.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Valor Venda é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cxValorCompra.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Valor Compra é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         if(produtoCtrl.registrarProduto(cxNome.getText(), cxValorVenda.getText(), cxValorCompra.getText())){
-            System.out.println("Produto criado");
+            JOptionPane.showMessageDialog(this, "Produto cadastrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+            ProdutosGUI produto = new ProdutosGUI();
+            produto.setVisible(true);
         }else{
-            System.out.println("Produto não criado");
+            JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -172,7 +172,7 @@ public class CriarSetorGUI extends javax.swing.JFrame {
     public void criarProduto(){
         SetorCtrl setorCtrl = new SetorCtrl();
         
-        String nome = cxNome.getText().trim();
+        String nome = cxNome.getText();
         String valeTransporte = cxValeTransporte.getText().trim();
         String valeRefeicao = cxValeRefeicao.getText().trim();
         String valeAlimentacao = cxValeAlimentacao.getText().trim();
@@ -205,12 +205,12 @@ public class CriarSetorGUI extends javax.swing.JFrame {
         
         
         if(setorCtrl.cadastrarSetor(nome, valeTransporte, valeRefeicao, valeAlimentacao, planoDeSaude)){
-            System.out.println("Setor criado");
+            JOptionPane.showMessageDialog(this, "Setor cadastrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-            FuncionariosGUI funcionariosGUI = new FuncionariosGUI();
-            funcionariosGUI.setVisible(true);
+            FuncionariosGUI funcionarios = new FuncionariosGUI();
+            funcionarios.setVisible(true);
         }else{
-            System.out.println("Setor não criado");
+            JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     

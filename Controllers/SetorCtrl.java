@@ -19,12 +19,20 @@ public class SetorCtrl {
             double valeAlimentacao = Double.parseDouble(va);
             double planoDeSaude = Double.parseDouble(ps);
 
+            if (nomeSetor == null || nomeSetor.isEmpty() ||
+                valeTransporte < 0 || valeRefeicao < 0 || valeAlimentacao < 0 || planoDeSaude < 0) {
+
+                return false;
+            }
+
             Setor setor = new Setor(Sessao.getIdFarmaciaLogada(), nomeSetor, valeTransporte, valeRefeicao, valeAlimentacao, planoDeSaude);
-            return dao.criarSetor(setor);
+            boolean sucesso = dao.criarSetor(setor);
+            return sucesso;
+
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Todos os valores devem ser números válidos (use ponto para decimais).", "Erro de conversão", JOptionPane.ERROR_MESSAGE);
             return false;
+        }
     }
-    }
+
 
 }

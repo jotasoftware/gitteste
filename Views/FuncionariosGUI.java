@@ -38,7 +38,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         btnAddAtualizar = new javax.swing.JButton();
         btnAddFuncionario = new javax.swing.JButton();
-        btnAddSetor2 = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         MnOpcoes = new javax.swing.JMenu();
@@ -126,11 +126,11 @@ public class FuncionariosGUI extends javax.swing.JFrame {
             }
         });
 
-        btnAddSetor2.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        btnAddSetor2.setText("Voltar");
-        btnAddSetor2.addActionListener(new java.awt.event.ActionListener() {
+        btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSetor2ActionPerformed(evt);
+                btnVoltarActionPerformed(evt);
             }
         });
 
@@ -174,7 +174,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
                         .addComponent(btnAddFuncionario))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 630, Short.MAX_VALUE)
-                        .addComponent(btnAddSetor2)))
+                        .addComponent(btnVoltar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,7 +197,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAddSetor2)
+                .addComponent(btnVoltar)
                 .addContainerGap())
         );
 
@@ -223,9 +223,10 @@ public class FuncionariosGUI extends javax.swing.JFrame {
         abreAdicionarFuncionario();
     }//GEN-LAST:event_btnAddFuncionarioActionPerformed
 
-    private void btnAddSetor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSetor2ActionPerformed
-        
-    }//GEN-LAST:event_btnAddSetor2ActionPerformed
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        fechaAtual();
+        abreHomeFarmacia();
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tbFuncionariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFuncionariosMouseClicked
         int linhaSelecionada = tbFuncionarios.getSelectedRow();
@@ -275,6 +276,11 @@ public class FuncionariosGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tbFuncionariosMouseClicked
 
+    public void abreHomeFarmacia() {
+        HomeFarmaciaGUI homeFarmacia = new HomeFarmaciaGUI();
+        homeFarmacia.setVisible(true); 
+    }
+    
     private void populaTabelas() {
         populaTabelaSetores();
         populaTabelaFuncionarios();
@@ -320,8 +326,8 @@ public class FuncionariosGUI extends javax.swing.JFrame {
     }
     
     private void abreAdicionarFuncionario() {
-        CriarSetorGUI criarSetorGUI = new CriarSetorGUI();
-        criarSetorGUI.setVisible(true); 
+        CriarFuncionarioGUI criarFuncionarioGUI = new CriarFuncionarioGUI();
+        criarFuncionarioGUI.setVisible(true); 
     }  
 
     public void fechaAtual(){
@@ -349,7 +355,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnAddAtualizar;
     private javax.swing.JButton btnAddFuncionario;
     private javax.swing.JButton btnAddSetor;
-    private javax.swing.JButton btnAddSetor2;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JMenuItem itMnSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

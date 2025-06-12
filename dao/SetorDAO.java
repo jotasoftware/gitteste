@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class SetorDAO {
     static Connection con = null;
-    static String url = "jdbc:postgresql://localhost:5432/smartcondo";
+    static String url = "jdbc:postgresql://localhost:5432/farmaciateste";
     static String driver = "org.postgresql.Driver";
     static String usuario = "postgres";
     static String senha = "niver2500";
@@ -22,7 +22,7 @@ public class SetorDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO \"Setor\" (\"nomeProduto\", \"valeTransporte\", \"valeRefeicao\", \"valeAlimentacao\", \"planoSaude\", \"idFarmacia\") VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Setor (nome, valeTransporte, valeRefeicao, valeAlimentacao, planoSaude, idFarmacia) VALUES (?, ?, ?, ?, ?, ?)";
             p = con.prepareStatement(sql);
             p.setString(1, setor.getNome());
             p.setDouble(2, setor.getValeTransporte());

@@ -3,10 +3,12 @@ import Controllers.FarmaciaCtrl;
 import Controllers.FuncionarioCtrl;
 import dto.SetorListagemDTO;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class CriarFuncionarioGUI extends javax.swing.JFrame {
     private ArrayList<SetorListagemDTO> setores;
+    private int setorSelecionado = 0;
 
     public CriarFuncionarioGUI() {
         initComponents();
@@ -31,7 +33,6 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbSetores = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
-        cxSetor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -109,17 +110,15 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tbSetores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbSetoresMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbSetores);
 
         jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel9.setText("Id Setor:");
-
-        cxSetor.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        cxSetor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cxSetorActionPerformed(evt);
-            }
-        });
+        jLabel9.setText("Setor:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,21 +146,17 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cxNome)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 30, Short.MAX_VALUE)
+                                .addGap(0, 32, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addGap(85, 85, 85))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cxSalario))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cxSetor)))))
+                        .addComponent(cxSalario))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -179,20 +174,15 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(cxIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cxSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(cxSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cxSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarFuncionario)
                     .addComponent(btnVoltar))
@@ -224,9 +214,14 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         funcionarios.setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void cxSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSetorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cxSetorActionPerformed
+    private void tbSetoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSetoresMouseClicked
+        int linhaSelecionada = tbSetores.getSelectedRow();
+        if (linhaSelecionada != -1) {
+            SetorListagemDTO setor = setores.get(linhaSelecionada);
+            setorSelecionado = setor.getId();
+        }
+            
+    }//GEN-LAST:event_tbSetoresMouseClicked
 
     public void fechaAtual(){
         this.dispose();
@@ -251,9 +246,33 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         String generoSelecionado = (String) cxGenero.getSelectedItem();
         FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
 
-        if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), generoSelecionado, cxSalario.getText(), cxSetor.getText())){
-            System.out.println("Funcionario cadastrado");
+        if (cxNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Nome é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cxIdade.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Idade é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (setorSelecionado == 0) {
+            JOptionPane.showMessageDialog(this, "O campo Setor é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cxSalario.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Salário é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), cxSalario.getText(), generoSelecionado, setorSelecionado)){
+            JOptionPane.showMessageDialog(this, "Funcionário cadastrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
+            FuncionariosGUI funcionarios = new FuncionariosGUI();
+            funcionarios.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
    
@@ -274,7 +293,6 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     private javax.swing.JTextField cxIdade;
     private javax.swing.JTextField cxNome;
     private javax.swing.JTextField cxSalario;
-    private javax.swing.JTextField cxSetor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;

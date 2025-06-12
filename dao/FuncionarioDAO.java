@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class FuncionarioDAO {
     static Connection con = null;
-    static String url = "jdbc:postgresql://localhost:5432/smartcondo";
+    static String url = "jdbc:postgresql://localhost:5432/farmaciateste";
     static String driver = "org.postgresql.Driver";
     static String usuario = "postgres";
     static String senha = "niver2500";
@@ -22,7 +22,7 @@ public class FuncionarioDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO \"Funcionario\" (\"nomeCompleto\", \"idade\", \"genero\", \"idSetor\", \"salarioBase\", \"idFarmacia\") VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Funcionario (nomeCompleto, idade, genero, idSetor, salarioBase, idFarmacia) VALUES (?, ?, ?::genero_enum, ?, ?, ?)";
             p = con.prepareStatement(sql);
             p.setString(1, funcionario.getNome());
             p.setDouble(2, funcionario.getIdade());
@@ -52,7 +52,7 @@ public class FuncionarioDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "DELETE FROM \"Funcionario\" WHERE \"idFuncionario\" = ?";
+            String sql = "DELETE FROM Funcionario WHERE idFuncionario = ?";
             p = con.prepareStatement(sql);
             p.setInt(1, idFuncionario);
             int linhasAfetadas = p.executeUpdate();
@@ -70,6 +70,7 @@ public class FuncionarioDAO {
             return false;
         } catch (Exception e) {
             System.out.println("Falha na exclusão: " + e.getMessage());
+            return false;
         }
     }
 

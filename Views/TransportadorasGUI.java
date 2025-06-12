@@ -1,26 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Views;
-import Controllers.EncomendaCtrl;
-import Controllers.PessoaCtrl;
-import Controllers.Sessao;
-import Controllers.VisitanteCtrl;
-import Models.Encomenda;
-import Models.Visitante;
-import java.util.ArrayList;
+
+import Controllers.TransportadoraCtrl;
+import dto.TransportadoraDTO;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author joaopedro
- */
 public class TransportadorasGUI extends javax.swing.JFrame {
-    private ArrayList<Encomenda> encomendas;
-    private ArrayList<Visitante> visitantes;
-    
+
     public TransportadorasGUI() {
         initComponents();
         populaTabela();
@@ -31,22 +19,21 @@ public class TransportadorasGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbEncomendas = new javax.swing.JTable();
+        tbTransportadoras = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnAddTransportadora = new javax.swing.JButton();
         btnAddAtualizar = new javax.swing.JButton();
-        btnAddSetor2 = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         MnOpcoes = new javax.swing.JMenu();
-        itMnPerfil = new javax.swing.JMenuItem();
-        itMnEditar = new javax.swing.JMenuItem();
         itMnSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        tbEncomendas.setModel(new javax.swing.table.DefaultTableModel(
+        tbTransportadoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -65,7 +52,7 @@ public class TransportadorasGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tbEncomendas);
+        jScrollPane1.setViewportView(tbTransportadoras);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
         jLabel1.setText("Transporte");
@@ -89,11 +76,19 @@ public class TransportadorasGUI extends javax.swing.JFrame {
             }
         });
 
-        btnAddSetor2.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        btnAddSetor2.setText("Voltar");
-        btnAddSetor2.addActionListener(new java.awt.event.ActionListener() {
+        btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSetor2ActionPerformed(evt);
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jButton1.setText("Excluir Transportadora");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -101,22 +96,6 @@ public class TransportadorasGUI extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         MnOpcoes.setText("Opcões");
-
-        itMnPerfil.setText("Perfil");
-        itMnPerfil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itMnPerfilActionPerformed(evt);
-            }
-        });
-        MnOpcoes.add(itMnPerfil);
-
-        itMnEditar.setText("Editar");
-        itMnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itMnEditarActionPerformed(evt);
-            }
-        });
-        MnOpcoes.add(itMnEditar);
 
         itMnSair.setText("Sair");
         itMnSair.addActionListener(new java.awt.event.ActionListener() {
@@ -138,399 +117,132 @@ public class TransportadorasGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddTransportadora))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddAtualizar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 630, Short.MAX_VALUE)
-                        .addComponent(btnAddSetor2)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAddAtualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnVoltar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddTransportadora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddAtualizar)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(btnAddTransportadora))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(btnAddTransportadora))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddSetor2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVoltar)
+                    .addComponent(btnAddAtualizar))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void itMnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnPerfilActionPerformed
-        abrePerfil();
-    }//GEN-LAST:event_itMnPerfilActionPerformed
-
     private void btnAddTransportadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransportadoraActionPerformed
-        abreCriarEncomenda();
+        abreCriarTransportadora();
     }//GEN-LAST:event_btnAddTransportadoraActionPerformed
 
     private void itMnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnSairActionPerformed
-        fechaAtual();
-        sair();
+        this.dispose();
     }//GEN-LAST:event_itMnSairActionPerformed
 
     private void btnAddAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAtualizarActionPerformed
         populaTabela();
     }//GEN-LAST:event_btnAddAtualizarActionPerformed
 
-    private void itMnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnEditarActionPerformed
-        abreEditar();
-    }//GEN-LAST:event_itMnEditarActionPerformed
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void btnAddSetor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSetor2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAddSetor2ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int selectedRow = tbTransportadoras.getSelectedRow();
 
+        // 1. Verifica se uma linha foi selecionada
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma transportadora na tabela para excluir.", "Nenhuma Seleção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Pega o ID da transportadora na coluna 0 da linha selecionada
+        int idParaDeletar = (int) tbTransportadoras.getValueAt(selectedRow, 0);
+        String nomeTransportadora = (String) tbTransportadoras.getValueAt(selectedRow, 1);
+
+        // 3. Pede confirmação
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja excluir a transportadora '" + nomeTransportadora + "'?",
+                "Confirmar Exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                // 4. Chama o controller para executar a exclusão
+                TransportadoraCtrl controller = new TransportadoraCtrl();
+                controller.excluirTransportadora(idParaDeletar);
+
+                JOptionPane.showMessageDialog(this, "Transportadora excluída com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                // 5. Atualiza a tabela para remover a linha
+                populaTabela();
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao excluir a transportadora: " + e.getMessage(), "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void populaTabela() {
-        EncomendaCtrl encomendaCtrl = new EncomendaCtrl();
-        encomendas = encomendaCtrl.listarEncomendasPorteiro();
-        DefaultTableModel model1 = (DefaultTableModel) tbEncomendas.getModel();
-        model1.setRowCount(0);
-        for (Encomenda encomenda : encomendas) {
-            model1.addRow(new Object[] {
-                encomenda.getIdEncomenda(),
-                encomenda.getAptoEncomenda(),
-                encomenda.getDataEncomenda(),
-            });
-        }
-        
-        VisitanteCtrl visitanteCtrl = new VisitanteCtrl();
-        visitantes = visitanteCtrl.todosVisitantes();
-        DefaultTableModel model2 = (DefaultTableModel) tbVisitantes.getModel();
-        model2.setRowCount(0);
-        for (Visitante visitante : visitantes) {
-            model2.addRow(new Object[] {
-                visitante.getData(),
-                visitante.getNome(),
-                visitante.getCpf(),
-                visitante.getApto(),
-            });
-        }
-        
-    }
-    public void fechaAtual(){
-        this.dispose();
-    }
-    
-    public void sair(){
-        Sessao.limparSessao();
-        LoginGUI login = new LoginGUI();
-        login.setVisible(true); 
-    }
-    
-    public void abreEditar(){
-        EditarContaGUI editarConta = new EditarContaGUI();
-        editarConta.setVisible(true); 
-    }
-    
-    public void abrePerfil() {
-        PessoaCtrl pessoaCtrl = new PessoaCtrl();
-        JOptionPane.showMessageDialog(null, pessoaCtrl.verificarDados(), "Perfil do Usuário", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void abreCriarEncomenda() {
-        CriarEncomendaGUI criarEncomenda = new CriarEncomendaGUI();
-        criarEncomenda.setVisible(true); 
-    }
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TransportadorasGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TransportadorasGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TransportadorasGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TransportadorasGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+        TransportadoraCtrl transportadoraCtrl = new TransportadoraCtrl();
+        List<TransportadoraDTO> transportadoras = transportadoraCtrl.listarTodas();
 
-        /* Create and display the form */
-        java.btnAddValeinvokeLater(new Runnable() {
+        DefaultTableModel model = (DefaultTableModel) tbTransportadoras.getModel();
+        model.setRowCount(0);
+
+        for (TransportadoraDTO dto : transportadoras) {
+            String estados = "N/A";
+            if (dto.getEstadosAtendidos() != null && !dto.getEstadosAtendidos().isEmpty()) {
+                estados = String.join(", ", dto.getEstadosAtendidos());
+            }
+
+            model.addRow(new Object[]{
+                dto.getId(),
+                dto.getNome(),
+                estados
+            });
+        }
+    }
+
+    public void abreCriarTransportadora() {
+        CriarTransportadoraGUI criarTransportadora = new CriarTransportadoraGUI();
+        criarTransportadora.setVisible(true);
+    }
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TransportadorasGUI().setVisible(true);
             }
@@ -540,16 +252,15 @@ public class TransportadorasGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnOpcoes;
     private javax.swing.JButton btnAddAtualizar;
-    private javax.swing.JButton btnAddSetor2;
     private javax.swing.JButton btnAddTransportadora;
-    private javax.swing.JMenuItem itMnEditar;
-    private javax.swing.JMenuItem itMnPerfil;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JMenuItem itMnSair;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tbEncomendas;
+    private javax.swing.JTable tbTransportadoras;
     // End of variables declaration//GEN-END:variables
 }

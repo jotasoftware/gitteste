@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Views;
+import Controllers.ComprasCtrl;
 import Controllers.Sessao;
 import Controllers.FarmaciaCtrl;
 import dto.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class HomeFarmaciaGUI extends javax.swing.JFrame {
@@ -326,26 +328,30 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_itMnEditarActionPerformed
 
     private void btnAddVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVendaActionPerformed
-        abreAdicionarVenda();
+
     }//GEN-LAST:event_btnAddVendaActionPerformed
 
     private void btnAddCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCompraActionPerformed
         abreAdicionarCompra();
+        fechaAtual();
     }//GEN-LAST:event_btnAddCompraActionPerformed
 
     private void btnAbreFuncionariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreFuncionariosActionPerformed
         abreFuncionario();
+        fechaAtual();
     }//GEN-LAST:event_btnAbreFuncionariosActionPerformed
 
     private void btnAbreTransportadorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreTransportadorasActionPerformed
         abreTransportadora();
+        fechaAtual();
     }//GEN-LAST:event_btnAbreTransportadorasActionPerformed
 
     private void btnAbreVendasProgramadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreVendasProgramadasActionPerformed
-        abreVendasProgramadas();
+         
     }//GEN-LAST:event_btnAbreVendasProgramadasActionPerformed
 
     private void btnAbreProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreProdutosActionPerformed
+        fechaAtual();
         abreProdutos();
     }//GEN-LAST:event_btnAbreProdutosActionPerformed
 
@@ -386,17 +392,17 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }
     
     private void populaTabelaLucrosMensais() {
-        vendas = farmaciaCtrl.listarVendas();
-        DefaultTableModel model1 = (DefaultTableModel) tbLucros.getModel();
-        model1.setRowCount(0);
-        for (LucroMensalDTO lucro : lucros) {
-            model1.addRow(new Object[] {
-                lucro.getMes(),
-                lucro.getSomatorioCompra(),
-                lucro.getSomatorioVenda(),
-                lucro.getLucroMes(),
-            });
-        } 
+//        vendas = farmaciaCtrl.listarVendas();
+//        DefaultTableModel model1 = (DefaultTableModel) tbLucros.getModel();
+//        model1.setRowCount(0);
+//        for (LucroMensalDTO lucro : lucros) {
+//            model1.addRow(new Object[] {
+//                lucro.getMes(),
+//                lucro.getSomatorioCompra(),
+//                lucro.getSomatorioVenda(),
+//                lucro.getLucroMes(),
+//            });
+//        } 
     }
     
     public void fechaAtual(){
@@ -410,14 +416,22 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }
     
     public void abreAdicionarCompra() {
-        CriarCompraGUI criarCompra = new CriarCompraGUI();
-        criarCompra.setVisible(true); 
+//        ComprasCtrl comprasCtrl = new ComprasCtrl();
+//        int idCompraGerada = comprasCtrl.criarNovaCompra();
+//        if (idCompraGerada != -1) {
+//            CriarCompraGUI criarCompra = new CriarCompraGUI(idCompraGerada);
+//            criarCompra.setVisible(true); 
+//            this.dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Erro ao iniciar compra.", "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
+//        
     }
-    
-    public void abreAdicionarVenda() {
-        CriarVendaGUI criarVendaGUI = new CriarVendaGUI();
-        criarVendaGUI.setVisible(true); 
-    }
+//    
+//    public void abreAdicionarVenda() {
+//        CriarVendaGUI criarVendaGUI = new CriarVendaGUI();
+//        criarVendaGUI.setVisible(true); 
+//    }
     
     public void abreFuncionario() {
         FuncionariosGUI funcionarios = new FuncionariosGUI();
@@ -434,10 +448,10 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         produtos.setVisible(true); 
     }
     
-    public void abreVendasProgramadas() {
-        VendasProgramadasGUI vendasProgramadas = new VendasProgramadasGUI();
-        vendasProgramadas.setVisible(true); 
-    }
+//    public void abreVendasProgramadas() {
+//        VendasProgramadasGUI vendasProgramadas = new VendasProgramadasGUI();
+//        vendasProgramadas.setVisible(true); 
+//    }
     
     public static void main(String args[]) {
 

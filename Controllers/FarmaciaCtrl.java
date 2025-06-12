@@ -32,6 +32,8 @@ public class FarmaciaCtrl {
              return false;
         }
         
+        System.out.println(ValidadorCNPJ.isValidCNPJ(cnpjFarmacia) + cnpjFarmacia);
+        
         Farmacia farmacia = new Farmacia(nome, cnpjFarmacia);
 
         return dao.adicionar(farmacia);

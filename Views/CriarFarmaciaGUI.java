@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.FarmaciaCtrl;
+import javax.swing.JOptionPane;
 
 public class CriarFarmaciaGUI extends javax.swing.JFrame {
 
@@ -114,7 +115,6 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
 
     private void btnCriarFarmaciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarFarmaciaActionPerformed
         criarFarmacia();
-        fechaAtual();
     }//GEN-LAST:event_btnCriarFarmaciaActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -130,9 +130,23 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
     public void criarFarmacia(){
         FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
         
+        if (cxNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Nome é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cxCNPJ.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo CNPJ é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         if(farmaciaCtrl.cadastrar(cxNome.getText(), cxCNPJ.getText())){
-            System.out.println("Farmacia cadastrada");
+            JOptionPane.showMessageDialog(this, "Farmacia cadastrada.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
+            LoginGUI login = new LoginGUI();
+            login.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     

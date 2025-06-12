@@ -16,27 +16,28 @@ public class FuncionarioCtrl {
     }
     
 
-    public boolean cadastrar(String nome, String idade, String salario, String genero, String idSetor) {
-        
-        int idadeInt = Integer.parseInt(idade);
-        double salarioDouble = Double.parseDouble(salario);
-        int setorInt = Integer.parseInt(idSetor);
-        
-        if (nome == null || nome.isEmpty() || 
-            idadeInt == 0 ||  salarioDouble == 0 ){
+    public boolean cadastrar(String nome, String idade, String salario, String genero, int idSetor) {
+        try {
+            int idadeInt = Integer.parseInt(idade);
+            double salarioDouble = Double.parseDouble(salario);
 
+            if (nome == null || nome.isEmpty() || idadeInt <= 0 || salarioDouble <= 0) {
                 return false;
-
             }
-        
-        String generoParaEnum = genero.toUpperCase();
-        Genero generoEnum = Genero.valueOf(generoParaEnum);
-        
-        Funcionario funcionario = new Funcionario(nome, idadeInt, salarioDouble, generoEnum, setorInt);
-       
-        dao.adicionar(funcionario);
-        return true;
 
+            Genero generoEnum = Genero.valueOf(genero);
+
+            Funcionario funcionario = new Funcionario(nome, idadeInt, salarioDouble, generoEnum, idSetor, Sessao.getIdFarmaciaLogada());
+            dao.adicionar(funcionario);
+            return true;
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro de conversão numérica: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro com valor de enum ou argumentos inválidos: " + e.getMessage());
+            return false;
+        }
     }
 
     public double getImposto(double salario) {

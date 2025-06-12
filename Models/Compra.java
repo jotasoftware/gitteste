@@ -1,4 +1,4 @@
-package Projeto.models;
+package Models;
 
 import java.time.LocalDate;
 
@@ -7,21 +7,27 @@ public class Compra {
     private int idCompra;
     private int idFuncionario;
     private LocalDate dataCompra;
-    private String cnpjFarmacia;
-
-    
-    public String getCnpjFarmacia() {
-
-        return cnpjFarmacia;
-
-    }
+    private int idFarmacia;
 
 
-    public Compra() {
+    public Compra(int idFarmacia) {
 
         this.idCompra = 0;
         this.idFuncionario = 0;
+        this.idFarmacia = idFarmacia;
         this.dataCompra = null;
+
+    }
+    
+     public int getIdFarmacia() {
+
+        return idFarmacia;
+
+    }
+     
+    public void setIdFarmacia(int idFarmacia) {
+
+        this.idFarmacia = idFarmacia;
 
     }
 

@@ -11,7 +11,7 @@ public class Funcionario {
     private int idSetor;
 
 
-    public Funcionario(String nome, int idade, double salario, Genero genero, int idSetor) {
+    public Funcionario(String nome, int idade, double salario, Genero genero, int idSetor, int idFarmacia) {
 
         this.nome = nome;
         this.id = 0;
@@ -19,6 +19,7 @@ public class Funcionario {
         this.genero = genero;
         this.salario = salario;
         this.idSetor = idSetor;
+        this.idFarmacia = idFarmacia;
         
     }
     
@@ -26,6 +27,12 @@ public class Funcionario {
         
         return idFarmacia;
 
+    }
+    
+    public void setIdFarmacia(int idFarmacia) {
+        
+        this.idFarmacia = idFarmacia;
+        
     }
 
     public void setNome(String nome) {

@@ -2,8 +2,8 @@ package Models;
 
 public enum Genero {
 
-    MASCULINO,
-    FEMININO,
-    OUTROS
+    Masculino,
+    Feminino,
+    Outros
     
 }

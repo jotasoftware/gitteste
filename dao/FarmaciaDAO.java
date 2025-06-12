@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class FarmaciaDAO {
     static Connection con = null;
-    static String url = "jdbc:postgresql://localhost:5432/smartcondo";
+    static String url = "jdbc:postgresql://localhost:5432/farmaciateste";
     static String driver = "org.postgresql.Driver";
     static String usuario = "postgres";
     static String senha = "niver2500";
     
-     public boolean adicionar(Farmacia farmacia){
+    public boolean adicionar(Farmacia farmacia){
         Connection con = null;
         PreparedStatement p = null;
         
@@ -48,7 +48,7 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "SELECT idFarmacia FROM \"farmacia\" WHERE cnpj = ?";
+            String sql = "SELECT idFarmacia FROM farmacia WHERE cnpj = ?";
             p = con.prepareStatement(sql);
             p.setString(1, cnpj);
             rs = p.executeQuery();
@@ -66,7 +66,6 @@ public class FarmaciaDAO {
     }
     
     
-    
     public ArrayList<CompraListagemDTO> listarComprasCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
@@ -76,23 +75,23 @@ public class FarmaciaDAO {
         try {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = "SELECT " +
-                    "    C.\"idCompra\", " +
-                    "    F.\"nomeCompleto\" AS \"nomeFuncionario\", " +
-                    "    C.\"dataCompra\", " +
-                    "    SUM(CP.\"qtdCompraProduto\") AS \"quantidadeProdutos\", " +
-                    "    C.\"totalCompra\" " +
+                    "    C.idCompra, " +
+                    "    F.nomeCompleto AS nomeFuncionario, " +
+                    "    C.dataCompra, " +
+                    "    SUM(CP.qtdCompraProduto) AS quantidadeProdutos, " +
+                    "    C.totalCompra " +
                     "FROM " +
-                    "    \"Compra\" C " +
+                    "    compra C " +
                     "JOIN " +
-                    "    \"Funcionario\" F ON C.\"idFuncionario\" = F.\"idFuncionario\" " +
+                    "    funcionario F ON C.idFuncionario = F.idFuncionario " +
                     "JOIN " +
-                    "    \"CompraProdutos\" CP ON C.\"idCompra\" = CP.\"idCompra\" " +
+                    "    compraprodutos CP ON C.idCompra = CP.idCompra " +
                     "WHERE " +
-                    "    C.\"idFarmacia\" = ? " +
+                    "    C.idFarmacia = ? " +
                     "GROUP BY " +
-                    "    C.\"idCompra\", F.\"nomeCompleto\", C.\"dataCompra\", C.\"totalCompra\" " +
+                    "    C.idCompra, F.nomeCompleto, C.dataCompra, C.totalCompra " +
                     "ORDER BY " +
-                    "    C.\"dataCompra\" DESC";
+                    "    C.dataCompra DESC";
         p = con.prepareStatement(sql);
         p.setInt(1, idFarmacia);
             rs = p.executeQuery();
@@ -105,7 +104,7 @@ public class FarmaciaDAO {
                 compra.setValorFinal(rs.getDouble("totalCompra"));
                 compras.add(compra);
             }
-
+               
         } catch (SQLException e) {
             System.out.println("Erro na consulta: " + e.getMessage());
         } finally {
@@ -130,23 +129,23 @@ public class FarmaciaDAO {
         try {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = "SELECT " +
-                        "    V.\"idVenda\", " +
-                        "    F.\"nomeCompleto\" AS \"nomeFuncionario\", " +
-                        "    V.\"dataVenda\", " +
-                        "    SUM(VP.\"qtdVendaProduto\") AS \"quantidadeProdutos\", " +
-                        "    V.\"totalVenda\" " +
+                        "    V.idVenda, " +
+                        "    F.nomeCompleto AS nomeFuncionario, " +
+                        "    V.dataVenda, " +
+                        "    SUM(VP.qtdVendaProduto) AS quantidadeProdutos, " +
+                        "    V.totalVenda " +
                         "FROM " +
-                        "    \"Venda\" V " +
+                        "    venda V " +
                         "JOIN " +
-                        "    \"Funcionario\" F ON V.\"idFuncionario\" = F.\"idFuncionario\" " +
+                        "    funcionario F ON V.idFuncionario = F.idFuncionario " +
                         "JOIN " +
-                        "    \"VendaProdutos\" VP ON V.\"idVenda\" = VP.\"idVenda\" " +
+                        "    vendaprodutos VP ON V.idVenda = VP.idVenda " +
                         "WHERE " +
-                        "    V.\"idFarmacia\" = ? " +
+                        "    V.idFarmacia = ? " +
                         "GROUP BY " +
-                        "    V.\"idVenda\", F.\"nomeCompleto\", V.\"dataVenda\", V.\"totalVenda\" " +
+                        "    V.idVenda, F.nomeCompleto, V.dataVenda, V.totalVenda " +
                         "ORDER BY " +
-                        "    V.\"dataVenda\" DESC";
+                        "    V.dataVenda DESC";
         
             p = con.prepareStatement(sql);
             p.setInt(1, idFarmacia);
@@ -186,39 +185,39 @@ public class FarmaciaDAO {
         try {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = "SELECT " +
-                        "    Fa.\"nome\" AS \"Nome da Farmácia\", " +
-                        "    TO_CHAR(CURRENT_DATE, 'YYYY-MM') AS \"mesReferencia\", " +
+                        "    Fa.nome AS Nome da Farmácia, " +
+                        "    TO_CHAR(CURRENT_DATE, 'YYYY-MM') AS mesReferencia, " +
                         "    ( " +
-                        "        SELECT COALESCE(SUM(V.\"totalVenda\"), 0) " +
-                        "        FROM \"Venda\" V " +
-                        "        WHERE V.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-                        "          AND V.\"dataVenda\" >= DATE_TRUNC('month', CURRENT_DATE) " +
-                        "          AND V.\"dataVenda\" < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' " +
-                        "    ) AS \"somatorioVendas\", " +
+                        "        SELECT COALESCE(SUM(V.totalVenda), 0) " +
+                        "        FROM Venda V " +
+                        "        WHERE V.idFarmacia = Fa.idFarmacia " +
+                        "          AND V.dataVenda >= DATE_TRUNC('month', CURRENT_DATE) " +
+                        "          AND V.dataVenda < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' " +
+                        "    ) AS somatorioVendas, " +
                         "    ( " +
-                        "        SELECT COALESCE(SUM(C.\"totalCompra\"), 0) " +
-                        "        FROM \"Compra\" C " +
-                        "        WHERE C.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-                        "          AND C.\"dataCompra\" >= DATE_TRUNC('month', CURRENT_DATE) " +
-                        "          AND C.\"dataCompra\" < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' " +
-                        "    ) AS \"somatorioCompras\", " +
+                        "        SELECT COALESCE(SUM(C.totalCompra), 0) " +
+                        "        FROM Compra C " +
+                        "        WHERE C.idFarmacia = Fa.idFarmacia " +
+                        "          AND C.dataCompra >= DATE_TRUNC('month', CURRENT_DATE) " +
+                        "          AND C.dataCompra < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' " +
+                        "    ) AS somatorioCompras, " +
                         "    ( " +
-                        "        (SELECT COALESCE(SUM(V.\"totalVenda\"), 0) " +
-                        "         FROM \"Venda\" V " +
-                        "         WHERE V.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-                        "           AND V.\"dataVenda\" >= DATE_TRUNC('month', CURRENT_DATE) " +
-                        "           AND V.\"dataVenda\" < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month') " +
+                        "        (SELECT COALESCE(SUM(V.totalVenda), 0) " +
+                        "         FROM Venda V " +
+                        "         WHERE V.idFarmacia = Fa.idFarmacia " +
+                        "           AND V.dataVenda >= DATE_TRUNC('month', CURRENT_DATE) " +
+                        "           AND V.dataVenda < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month') " +
                         "        - " +
-                        "        (SELECT COALESCE(SUM(C.\"totalCompra\"), 0) " +
-                        "         FROM \"Compra\" C " +
-                        "         WHERE C.\"idFarmacia\" = Fa.\"idFarmacia\" " +
-                        "           AND C.\"dataCompra\" >= DATE_TRUNC('month', CURRENT_DATE) " +
-                        "           AND C.\"dataCompra\" < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month') " +
-                        "    ) AS \"lucroMes\" " +
+                        "        (SELECT COALESCE(SUM(C.totalCompra), 0) " +
+                        "         FROM Compra C " +
+                        "         WHERE C.idFarmacia = Fa.idFarmacia " +
+                        "           AND C.dataCompra >= DATE_TRUNC('month', CURRENT_DATE) " +
+                        "           AND C.dataCompra < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month') " +
+                        "    ) AS lucroMes " +
                         "FROM " +
-                        "    \"Farmacia\" Fa " +
+                        "    farmacia Fa " +
                         "WHERE " +
-                        "    Fa.\"idFarmacia\" = ?";
+                        "    Fa.idFarmacia = ?";
         
             p = con.prepareStatement(sql);
             p.setInt(1, idFarmacia);
@@ -249,7 +248,6 @@ public class FarmaciaDAO {
     }
      
      
-    //verificar dados no bd
     public ArrayList<Produto> listarProdutosCnpj(int idFarmacia) {
         Connection con = null;
         PreparedStatement p = null;
@@ -258,14 +256,14 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "SELECT \"id\", \"nomeProduto\", \"valorVenda\", \"valorCusto\", \"idFarmacia\", \"quantidade\" " +
-                         "FROM \"Produto\" WHERE \"idFarmacia\" = ?";
+            String sql = "SELECT idProduto, nomeProduto, valorVenda, valorCusto, idFarmacia, quantidade " +
+                         "FROM Produto WHERE idFarmacia = ?";
             p = con.prepareStatement(sql);
             p.setInt(1, idFarmacia);
             rs = p.executeQuery();
             while (rs.next()) {
                 Produto produto = new Produto();
-                produto.setIdProduto(rs.getInt("id")); 
+                produto.setIdProduto(rs.getInt("idProduto")); 
                 produto.setNomeProduto(rs.getString("nomeProduto"));
                 produto.setValorVenda(rs.getDouble("valorVenda"));
                 produto.setValorCusto(rs.getDouble("valorCusto"));
@@ -297,26 +295,19 @@ public class FarmaciaDAO {
         try {
             con = DriverManager.getConnection(url, usuario, senha);
             String sql = ""
-                        + "SELECT "
-                        + "    S.\"idSetor\", "
-                        + "    S.\"nome\", "
-                        + "    COUNT(F.\"idFuncionario\") OVER (PARTITION BY S.\"idSetor\") AS totalFuncionariosSetor, "
-                        + "    F.\"idFuncionario\", "
-                        + "    F.\"nomeCompleto\", "
-                        + "    F.\"salarioBase\", "
-                        + "    S.\"valeRefeicao\", "
-                        + "    S.\"valeAlimentacao\", "
-                        + "    S.\"planoSaude\", "
-                        + "    S.\"planoOdonto\", "
-                        + "    S.\"valeTransporte\" "
-                        + "FROM "
-                        + "    \"Funcionario\" F "
-                        + "JOIN "
-                        + "    \"Setor\" S ON F.\"idSetor\" = S.\"idSetor\" "
-                        + "WHERE "
-                        + "    F.\"idFarmacia\" = ? "
-                        + "ORDER BY "
-                        + "    S.\"nome\", F.\"nomeCompleto\"";
+                    + "SELECT DISTINCT "
+                    + "    S.idSetor, "
+                    + "    S.nome, "
+                    + "    COUNT(F.idFuncionario) OVER (PARTITION BY S.idSetor) AS totalFuncionariosSetor, "
+                    + "    S.valeRefeicao, "
+                    + "    S.valeAlimentacao, "
+                    + "    S.planoSaude, "
+                    + "    S.valeTransporte "
+                    + "FROM Setor S "
+                    + "LEFT JOIN Funcionario F ON F.idSetor = S.idSetor "
+                    + "LEFT JOIN Farmacia Fa ON F.idFarmacia = Fa.idFarmacia "
+                    + "WHERE Fa.idFarmacia = ? OR F.idFuncionario IS NULL "
+                    + "ORDER BY S.nome";
             p = con.prepareStatement(sql);
             p.setInt(1, idFarmacia);
             rs = p.executeQuery();
@@ -327,7 +318,7 @@ public class FarmaciaDAO {
                 setor.setValeTransporte(rs.getDouble("valeTransporte"));
                 setor.setValeAlimentacao(rs.getDouble("valeAlimentacao"));
                 setor.setValeRefeicao(rs.getDouble("valeRefeicao"));
-                setor.setPlanoSaude(rs.getDouble("planoDeSaude"));
+                setor.setPlanoSaude(rs.getDouble("planoSaude"));
                 setor.setQtdFuncionarios(rs.getInt("totalFuncionariosSetor"));
 
                 setores.add(setor);
@@ -356,19 +347,27 @@ public class FarmaciaDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "SELECT " +
-                         "    Fc.\"idFuncionario\", " +
-                         "    Fc.\"nomeCompleto\", " +
-                         "    S.\"nome\", " +
-                         "    Fc.\"salarioBase\" " +
-                         "FROM " +
-                         "    \"Funcionario\" Fc " +
-                         "JOIN " +
-                         "    \"Setor\" S ON Fc.\"idSetor\" = S.\"idSetor\" " +
-                         "WHERE " +
-                         "    Fc.\"idFarmacia\" = ? " +
-                         "ORDER BY " +
-                         "    Fc.\"nomeCompleto\"";
+            String sql = ""
+                + "SELECT "
+                + "    S.nome, "
+                + "    COUNT(F.idFuncionario) OVER (PARTITION BY S.idSetor), "
+                + "    F.idFuncionario, "
+                + "    F.nomeCompleto, "
+                + "    F.salarioBase, "
+                + "    S.valeRefeicao, "
+                + "    S.valeAlimentacao, "
+                + "    S.planoSaude, "
+                + "    S.valeTransporte "
+                + "FROM "
+                + "    Funcionario F "
+                + "JOIN "
+                + "    Setor S ON F.idSetor = S.idSetor "
+                + "JOIN "
+                + "    Farmacia Fa ON F.idFarmacia = Fa.idFarmacia "
+                + "WHERE "
+                + "    Fa.idFarmacia = ? "
+                + "ORDER BY "
+                + "    S.nome, F.nomeCompleto";
             p = con.prepareStatement(sql);
             p.setInt(1, idFarmacia);
             rs = p.executeQuery();
@@ -378,6 +377,10 @@ public class FarmaciaDAO {
                 funcionario.setIdFuncionario(rs.getInt("idFuncionario"));
                 funcionario.setNomeSetor(rs.getString("nome"));
                 funcionario.setSalarioBase(rs.getDouble("salarioBase"));
+                funcionario.setValeTransporte(rs.getDouble("valeTransporte"));
+                funcionario.setValeAlimentacao(rs.getDouble("valeAlimentacao"));
+                funcionario.setValeRefeicao(rs.getDouble("valeRefeicao"));
+                funcionario.setPlanoSaude(rs.getDouble("planoSaude"));
 
                 funcionarios.add(funcionario);
             }
