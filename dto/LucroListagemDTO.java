@@ -1,18 +1,18 @@
 package dto;
 
-public class LucroMensalDTO {
+public class LucroListagemDTO {
     
     private double somatorioVenda;
     private double somatorioCompra;
-    private double lucroMes;
-    private String mes;
+    private double lucro;
+    private String data;
 
-    public LucroMensalDTO() {
+    public LucroListagemDTO() {
 
         this.somatorioCompra = 0;
         this.somatorioVenda = 0;
-        this.lucroMes = 0;
-        this.mes = "";
+        this.lucro = 0;
+        this.data = "";
 
     }
 
@@ -41,27 +41,27 @@ public class LucroMensalDTO {
     }
 
 
-    public void setLucroMes(double lucroMes) {
+    public void setLucro(double lucro) {
         
-        this.lucroMes = lucroMes;
+        this.lucro = lucro;
 
     }
     
-    public void setMes(String mes) {
+    public void setData(String data) {
     
-        this.mes = mes;
+        this.data = data;
     
     }
     
-    public String getMes() {
+    public String getData() {
             
-        return mes;
+        return data;
     
     }
 
-    public double getLucroMes() {
+    public double getLucro() {
      
-        return lucroMes;
+        return lucro;
 
     }
 

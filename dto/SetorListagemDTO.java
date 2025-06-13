@@ -8,6 +8,7 @@ public class SetorListagemDTO {
     private double valeRefeicao;
     private double valeAlimentacao;
     private double planoSaude;
+    private double planoOdontologico;
     private int qtdFuncionarios;
 
     public SetorListagemDTO() {
@@ -67,6 +68,14 @@ public class SetorListagemDTO {
 
     public void setPlanoSaude(double planoSaude) {
         this.planoSaude = planoSaude;
+    }
+    
+    public double getPlanoOdontologico() {
+        return planoOdontologico;
+    }
+
+    public void setPlanoOdontologico(double planoOdontologico) {
+        this.planoOdontologico = planoOdontologico;
     }
 
     public int getQtdFuncionarios() {

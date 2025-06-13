@@ -3,6 +3,7 @@ package Models;
 public class Farmacia {
     private String nome;
     private String cnpjFarmacia;
+    private double saldoInicial;
 
     public String getNome() {
         return nome;
@@ -25,13 +26,19 @@ public class Farmacia {
         
     }
 
+    public double getSaldoInicial() {
+        return saldoInicial;
+    }
 
+    public void setSaldoInicial(double saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
 
-
-    public Farmacia(String nome, String cnpjFarmacia) {
+    public Farmacia(String nome, String cnpjFarmacia, double saldoInicial) {
        
         this.nome = nome;
         this.cnpjFarmacia = cnpjFarmacia;
+        this.saldoInicial = saldoInicial;
        
     }
 }

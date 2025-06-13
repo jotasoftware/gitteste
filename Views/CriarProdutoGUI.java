@@ -1,5 +1,6 @@
 package Views;
 import Controllers.ProdutoCtrl;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class CriarProdutoGUI extends javax.swing.JFrame {

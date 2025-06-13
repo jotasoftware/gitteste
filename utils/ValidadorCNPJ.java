@@ -27,6 +27,7 @@ public class ValidadorCNPJ {
                 soma += Character.getNumericValue(cnpj.charAt(i)) * pesos2[i];
             }
             int dig2 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+    
 
             return cnpj.charAt(12) == Character.forDigit(dig1, 10) &&
                    cnpj.charAt(13) == Character.forDigit(dig2, 10);

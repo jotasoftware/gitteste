@@ -48,17 +48,17 @@ public class FuncionariosGUI extends javax.swing.JFrame {
 
         tbSetores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Setor", "Funcionarios", "Vale Transporte", "Vale Refeição", "Vale Alimentação", "Plano de Saude"
+                "Setor", "Funcionarios", "Vale Transporte", "Vale Refeição", "Vale Alimentação", "Plano de Saude", "Plano Odontologico"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true, true
+                false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -243,6 +243,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
                 "Vale Refeição: %s\n" +
                 "Vale Alimentação: %s\n" +
                 "Plano de Saúde: %s\n" +
+                "Plano Odontológico: %s\n" +
                 "Salário Bruto: R$ %.2f\n" +
                 "Imposto: R$ %.2f\n" +
                 "Salário Líquido: R$ %.2f\n" +
@@ -254,6 +255,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
                 funcionario.getValeRefeicao(),
                 funcionario.getValeAlimentacao(),
                 funcionario.getPlanoSaude(),
+                funcionario.getPlanoOdontologico(),
                 funcionario.getSalarioBase(),
                 funcionarioCtrl.getImposto(funcionario.getSalarioBase()),
                 funcionarioCtrl.getSalarioLiquido(funcionario.getSalarioBase())
@@ -270,6 +272,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
             if (resposta == JOptionPane.YES_OPTION) {
                 if(funcionarioCtrl.apagar(funcionario.getIdFuncionario())){
                     JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
+                    populaTabelas();
                 }
             }
 
@@ -299,6 +302,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
                 setor.getValeRefeicao(),
                 setor.getValeAlimentacao(),
                 setor.getPlanoSaude(),
+                setor.getPlanoOdontologico()
             });
         }
         

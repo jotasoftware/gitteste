@@ -4,72 +4,43 @@ import Models.Funcionario;
 import java.sql.*;
 
 public class FuncionarioDAO {
-    static Connection con = null;
-    static String url = "jdbc:postgresql://localhost:5432/farmaciateste";
-    static String driver = "org.postgresql.Driver";
-    static String usuario = "postgres";
-    static String senha = "niver2500";
-    
-    public void adicionar(Funcionario funcionario){
-        Connection con = null;
-        PreparedStatement p = null;
-        
-        try{
-            Class.forName(driver);
-        }catch(Exception e){
-            System.out.println("Falha na criação");
-        }
-        
-        try {
-            con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO Funcionario (nomeCompleto, idade, genero, idSetor, salarioBase, idFarmacia) VALUES (?, ?, ?::genero_enum, ?, ?, ?)";
-            p = con.prepareStatement(sql);
-            p.setString(1, funcionario.getNome());
-            p.setDouble(2, funcionario.getIdade());
-            p.setString(3, funcionario.getGenero().name());
-            p.setDouble(4, funcionario.getIdSetor());
-            p.setDouble(5, funcionario.getSalario());
-            p.setInt(6, funcionario.getIdFarmacia());
-            p.execute();
-            p.close();
-            con.close();
-        } catch (Exception e) {
-            System.out.println("Falha na inserção: " + e.getMessage());
-        }
-        
+
+    private final Connection connection;
+
+    public FuncionarioDAO(Connection connection) {
+        this.connection = connection;
     }
-    
+
+    public boolean adicionar(Funcionario funcionario) {
+        String sql = "INSERT INTO Funcionario (nomeCompleto, idade, genero, idSetor, salarioBase, idFarmacia) VALUES (?, ?, ?::genero_enum, ?, ?, ?)";
+        
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setString(1, funcionario.getNome());
+            pstmt.setInt(2, funcionario.getIdade()); 
+            pstmt.setString(3, funcionario.getGenero().name());
+            pstmt.setInt(4, funcionario.getIdSetor());
+            pstmt.setDouble(5, funcionario.getSalario());
+            pstmt.setInt(6, funcionario.getIdFarmacia());
+            
+            pstmt.execute();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Falha na inserção do funcionário: " + e.getMessage());
+            return false;
+        }
+    }
 
     public boolean remover(int idFuncionario) {
-        Connection con = null;
-        PreparedStatement p = null;
+        String sql = "DELETE FROM Funcionario WHERE idFuncionario = ?";
+        
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setInt(1, idFuncionario);
+            int linhasAfetadas = pstmt.executeUpdate();
+            return linhasAfetadas > 0; 
 
-        try {
-            Class.forName(driver);
-        } catch (Exception e) {
-            System.out.println("Falha ao carregar o driver: " + e.getMessage());
-        }
-
-        try {
-            con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "DELETE FROM Funcionario WHERE idFuncionario = ?";
-            p = con.prepareStatement(sql);
-            p.setInt(1, idFuncionario);
-            int linhasAfetadas = p.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                System.out.println("Funcionário removido com sucesso.");
-                return true;
-            } else {
-                System.out.println("Nenhum funcionário encontrado com o ID informado.");
-            }
-
-            p.close();
-            con.close();
-            
-            return false;
-        } catch (Exception e) {
-            System.out.println("Falha na exclusão: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Falha na exclusão do funcionário: " + e.getMessage());
             return false;
         }
     }

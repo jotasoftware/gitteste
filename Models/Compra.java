@@ -10,10 +10,10 @@ public class Compra {
     private int idFarmacia;
 
 
-    public Compra(int idFarmacia) {
+    public Compra(int idFarmacia, int idFuncionario) {
 
         this.idCompra = 0;
-        this.idFuncionario = 0;
+        this.idFuncionario = idFuncionario;
         this.idFarmacia = idFarmacia;
         this.dataCompra = null;
 

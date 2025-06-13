@@ -201,7 +201,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cxGeneroActionPerformed
 
     private void btnCriarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarFuncionarioActionPerformed
-        criarFarmacia();
+        criarFuncionario();
     }//GEN-LAST:event_btnCriarFuncionarioActionPerformed
 
     private void cxSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSalarioActionPerformed
@@ -242,7 +242,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         
     }
     
-    public void criarFarmacia(){
+    public void criarFuncionario(){
         String generoSelecionado = (String) cxGenero.getSelectedItem();
         FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
 

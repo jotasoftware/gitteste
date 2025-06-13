@@ -10,6 +10,7 @@ public class FuncionarioListagemDTO {
     private double valeRefeicao;
     private double valeAlimentacao;
     private double planoSaude;
+    private double planoOdontologico;
 
     
     public FuncionarioListagemDTO() {
@@ -22,6 +23,7 @@ public class FuncionarioListagemDTO {
         this.valeRefeicao = 0.0;
         this.valeAlimentacao = 0.0;
         this.planoSaude = 0.0;
+        this.planoOdontologico = 0.0;
 
     }
 
@@ -119,6 +121,14 @@ public class FuncionarioListagemDTO {
     
         return planoSaude;
 
+    }
+    
+    public double getPlanoOdontologico() {
+        return planoOdontologico;
+    }
+
+    public void setPlanoOdontologico(double planoOdontologico) {
+        this.planoOdontologico = planoOdontologico;
     }
 
 

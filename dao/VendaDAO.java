@@ -1,16 +1,18 @@
 package dao;
 
-import Models.Compra;
+import Models.Venda;
 import Models.ProdutosCompraVenda;
 import dto.ProdutosCompraListagemDTO;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CompraDAO {
+public class VendaDAO {
     static Connection con = null;
     static String url = "jdbc:postgresql://localhost:5432/farmaciateste";
     static String driver = "org.postgresql.Driver";
@@ -18,7 +20,7 @@ public class CompraDAO {
     static String senha = "niver2500";
     
     
-    public int gerarCompra(Compra compra){
+    public int gerarVenda(Venda venda){
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -32,14 +34,14 @@ public class CompraDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO compra (idFarmacia, idFuncionario) VALUES (?, ?) RETURNING idCompra";
+            String sql = "INSERT INTO venda (idFarmacia, idFuncionario) VALUES (?, ?) RETURNING idVenda";
             p = con.prepareStatement(sql);
-            p.setInt(1, compra.getIdFarmacia());
-            p.setInt(2, compra.getIdFuncionario());
+            p.setInt(1, venda.getIdFarmacia());
+            p.setInt(2, venda.getIdFuncionario());
 
             rs = p.executeQuery();
             if (rs.next()) {
-                idGerado = rs.getInt("idCompra");
+                idGerado = rs.getInt("idVenda");
             }
             
         } catch (Exception e) {
@@ -58,7 +60,7 @@ public class CompraDAO {
         
     }
     
-    public boolean adicionarProdutoNaCompra(ProdutosCompraVenda produtosCompra){
+    public boolean adicionarProdutoNaVenda(ProdutosCompraVenda produtosVenda){
         Connection con = null;
         PreparedStatement p = null;
         
@@ -70,11 +72,11 @@ public class CompraDAO {
         
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "INSERT INTO compraprodutos (idCompra, idProduto, qtdCompraProduto) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO vendaProdutos (idVenda, idProduto, qtdVendaProduto) VALUES (?, ?, ?)";
             p = con.prepareStatement(sql);
-            p.setInt(1, produtosCompra.getIdNota());
-            p.setInt(2, produtosCompra.getIdProduto());
-            p.setInt(3, produtosCompra.getQuant());
+            p.setInt(1, produtosVenda.getIdNota());
+            p.setInt(2, produtosVenda.getIdProduto());
+            p.setInt(3, produtosVenda.getQuant());
             p.execute();
             p.close();
             con.close();
@@ -86,8 +88,7 @@ public class CompraDAO {
         
     }
     
-    public ArrayList<ProdutosCompraListagemDTO> listarProdutosNaCompra(int idCompra) {
-        System.out.println(idCompra);
+    public ArrayList<ProdutosCompraListagemDTO> listarProdutosNaVenda(int idVenda) {
         Connection con = null;
         PreparedStatement p = null;
         ResultSet rs = null;
@@ -95,28 +96,27 @@ public class CompraDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "SELECT p.idProduto, p.nomeProduto, cp.qtdCompraProduto, " +
-                     "(cp.qtdCompraProduto * p.valorCusto) AS valor_total_item " +
-                     "FROM CompraProdutos cp " +
-                     "JOIN Produto p ON cp.idProduto = p.idProduto " +
-                     "WHERE cp.idCompra = ? " +
-                     "ORDER BY p.nomeProduto;";
-        
+            String sql = "SELECT p.nomeProduto, p.idProduto, vp.qtdVendaProduto, " +
+                         "(vp.qtdVendaProduto * p.valorVenda) AS valor_total_item " +
+                         "FROM VendaProdutos vp " +
+                         "JOIN Produto p ON vp.idProduto = p.idProduto " +
+                         "WHERE vp.idVenda = ? " +
+                         "ORDER BY p.nomeProduto;";
             p = con.prepareStatement(sql);
-            p.setInt(1, idCompra);
+            p.setInt(1, idVenda);
             rs = p.executeQuery();
             while (rs.next()) {
                 ProdutosCompraListagemDTO produto = new ProdutosCompraListagemDTO();
                 produto.setIdProduto(rs.getInt("idProduto"));
                 produto.setNomeProduto(rs.getString("nomeProduto"));
-                produto.setQtdProduto(rs.getInt("qtdCompraProduto"));
+                produto.setQtdProduto(rs.getInt("qtdVendaProduto"));
                 produto.setValorTotal(rs.getDouble("valor_total_item"));
                 produtos.add(produto);
 
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro na consulta: " + e.getMessage());
+            System.out.println("Erro na consultaa: " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -130,7 +130,7 @@ public class CompraDAO {
         return produtos;
     }
     
-     public boolean remover(int idCompra, int idProduto) {
+     public boolean remover(int idVenda, int idProduto) {
         Connection con = null;
         PreparedStatement p = null;
 
@@ -142,9 +142,9 @@ public class CompraDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "DELETE FROM CompraProdutos WHERE idCompra = ? AND idProduto = ?";
+            String sql = "DELETE FROM VendaProdutos WHERE idVenda = ? AND idProduto = ?";
             p = con.prepareStatement(sql);
-            p.setInt(1, idCompra);
+            p.setInt(1, idVenda);
             p.setInt(2, idProduto);
             int linhasAfetadas = p.executeUpdate();
 
@@ -165,7 +165,7 @@ public class CompraDAO {
         }
      }
      
-    public boolean finalizarCompra(int idCompra, double total) {
+    public boolean finalizarVenda(int idVenda, double total, LocalDate data) {
         Connection con = null;
         PreparedStatement p = null;
 
@@ -177,10 +177,11 @@ public class CompraDAO {
 
         try {
             con = DriverManager.getConnection(url, usuario, senha);
-            String sql = "UPDATE Compra SET status = true, totalCompra = ? WHERE idCompra = ?";
+            String sql = "UPDATE Venda SET status = true, totalVenda = ?, dataVenda = ? WHERE idVenda = ?";
             p = con.prepareStatement(sql);
             p.setDouble(1, total);
-            p.setInt(2, idCompra);
+            p.setDate(2, Date.valueOf(data));
+            p.setInt(3, idVenda);
 
             int linhasAfetadas = p.executeUpdate();
 
@@ -188,12 +189,12 @@ public class CompraDAO {
                 System.out.println("Compra finalizada com sucesso.");
                 return true;
             } else {
-                System.out.println("Nenhuma compra encontrada com o ID informado.");
+                System.out.println("Nenhuma Venda encontrada com o ID informado.");
             }
 
             return false;
         } catch (Exception e) {
-            System.out.println("Falha ao finalizar a compra: " + e.getMessage());
+            System.out.println("Falha ao finalizar a venda: " + e.getMessage());
             return false;
         } finally {
             try {

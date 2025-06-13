@@ -3,12 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Views;
-import Controllers.ComprasCtrl;
 import Controllers.Sessao;
 import Controllers.FarmaciaCtrl;
 import dto.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class HomeFarmaciaGUI extends javax.swing.JFrame {
@@ -16,11 +14,15 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     
     private ArrayList<CompraListagemDTO> compras;
     private ArrayList<VendaListagemDTO> vendas;
-    private ArrayList<LucroMensalDTO> lucros;
+    private ArrayList<LucroListagemDTO> lucros;
+    private ArrayList<LucroListagemDTO> lucrosAnuais;
+    private double saldoAtual;
     
     public HomeFarmaciaGUI() {
         initComponents();
         populaTabelas();
+        atualizaSaldo();
+        this.saldoAtual = 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -41,11 +43,14 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         btnAbreTransportadoras = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         labelValor = new javax.swing.JLabel();
-        btnAbreVendasProgramadas = new javax.swing.JButton();
+        btnAbrePrevisoes = new javax.swing.JButton();
         Numero1 = new javax.swing.JScrollPane();
         tbLucros = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         btnAbreProdutos = new javax.swing.JButton();
+        Numero2 = new javax.swing.JScrollPane();
+        tbLucrosAnuais = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         MnOpcoes = new javax.swing.JMenu();
@@ -158,13 +163,12 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
 
         labelValor.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         labelValor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelValor.setText("Valor");
 
-        btnAbreVendasProgramadas.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        btnAbreVendasProgramadas.setText("Vendas programadas");
-        btnAbreVendasProgramadas.addActionListener(new java.awt.event.ActionListener() {
+        btnAbrePrevisoes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnAbrePrevisoes.setText("Previsões");
+        btnAbrePrevisoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAbreVendasProgramadasActionPerformed(evt);
+                btnAbrePrevisoesActionPerformed(evt);
             }
         });
 
@@ -199,6 +203,30 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
                 btnAbreProdutosActionPerformed(evt);
             }
         });
+
+        tbLucrosAnuais.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Ano", "Compras", "Vendas", "Lucro"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Numero2.setViewportView(tbLucrosAnuais);
+
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel6.setText("Lucros anuais");
 
         jMenu2.setText("Inicio");
         jMenuBar1.add(jMenu2);
@@ -238,46 +266,53 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelValor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Numero1, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAbreFuncionarios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAbreTransportadoras)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAbreProdutos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAbreVendasProgramadas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAbrePrevisoes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAddAtualizar))
-                    .addComponent(jLabel5)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(Numero, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAddCompra)))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(214, 214, 214)
-                                .addComponent(btnAddVenda))
-                            .addComponent(tbVendas2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(labelValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(Numero1, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(Numero, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnAddCompra)))
+                                        .addGap(21, 21, 21)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(214, 214, 214)
+                                                .addComponent(btnAddVenda))
+                                            .addComponent(tbVendas2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(Numero2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4)
@@ -296,14 +331,17 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Numero1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAbreTransportadoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAbreVendasProgramadas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAbreFuncionarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAbreProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Numero2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAbreFuncionarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAbreProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAbreTransportadoras)
+                    .addComponent(btnAbrePrevisoes))
                 .addContainerGap())
         );
 
@@ -321,6 +359,7 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
 
     private void btnAddAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAtualizarActionPerformed
         populaTabelas();
+        atualizaSaldo();
     }//GEN-LAST:event_btnAddAtualizarActionPerformed
 
     private void itMnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnEditarActionPerformed
@@ -328,7 +367,8 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_itMnEditarActionPerformed
 
     private void btnAddVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVendaActionPerformed
-
+        abreAdicionarVenda();
+        fechaAtual();
     }//GEN-LAST:event_btnAddVendaActionPerformed
 
     private void btnAddCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCompraActionPerformed
@@ -346,9 +386,10 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         fechaAtual();
     }//GEN-LAST:event_btnAbreTransportadorasActionPerformed
 
-    private void btnAbreVendasProgramadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreVendasProgramadasActionPerformed
-         
-    }//GEN-LAST:event_btnAbreVendasProgramadasActionPerformed
+    private void btnAbrePrevisoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrePrevisoesActionPerformed
+        abreVendasProgramadas();
+        fechaAtual();
+    }//GEN-LAST:event_btnAbrePrevisoesActionPerformed
 
     private void btnAbreProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreProdutosActionPerformed
         fechaAtual();
@@ -359,6 +400,7 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         populaTabelaCompra();
         populaTabelaVenda();
         populaTabelaLucrosMensais();
+        populaTabelaLucrosAnuais();
     }
 
     private void populaTabelaCompra() {
@@ -392,17 +434,39 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }
     
     private void populaTabelaLucrosMensais() {
-//        vendas = farmaciaCtrl.listarVendas();
-//        DefaultTableModel model1 = (DefaultTableModel) tbLucros.getModel();
-//        model1.setRowCount(0);
-//        for (LucroMensalDTO lucro : lucros) {
-//            model1.addRow(new Object[] {
-//                lucro.getMes(),
-//                lucro.getSomatorioCompra(),
-//                lucro.getSomatorioVenda(),
-//                lucro.getLucroMes(),
-//            });
-//        } 
+        lucros = farmaciaCtrl.listarLucrosMensais(false);
+        DefaultTableModel model1 = (DefaultTableModel) tbLucros.getModel();
+        model1.setRowCount(0);
+        for (LucroListagemDTO lucro : lucros) {
+            model1.addRow(new Object[] {
+                lucro.getData(),
+                lucro.getSomatorioCompra(),
+                lucro.getSomatorioVenda(),
+                lucro.getLucro(),
+            });
+        } 
+    }
+    
+    private void populaTabelaLucrosAnuais() {
+        lucrosAnuais = farmaciaCtrl.listarLucrosAnuais(false);
+        DefaultTableModel model1 = (DefaultTableModel) tbLucrosAnuais.getModel();
+        model1.setRowCount(0);
+        for (LucroListagemDTO lucro : lucrosAnuais) {
+            model1.addRow(new Object[] {
+                lucro.getData(),
+                lucro.getSomatorioCompra(),
+                lucro.getSomatorioVenda(),
+                lucro.getLucro(),
+            });
+        } 
+    }
+    
+    private void atualizaSaldo() {
+        saldoAtual = farmaciaCtrl.buscaSaldo();
+        for (LucroListagemDTO lucro : lucros) {
+            saldoAtual += lucro.getLucro();
+        } 
+        labelValor.setText(String.format("R$ %.2f", saldoAtual));
     }
     
     public void fechaAtual(){
@@ -416,22 +480,14 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     }
     
     public void abreAdicionarCompra() {
-//        ComprasCtrl comprasCtrl = new ComprasCtrl();
-//        int idCompraGerada = comprasCtrl.criarNovaCompra();
-//        if (idCompraGerada != -1) {
-//            CriarCompraGUI criarCompra = new CriarCompraGUI(idCompraGerada);
-//            criarCompra.setVisible(true); 
-//            this.dispose();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Erro ao iniciar compra.", "Erro", JOptionPane.ERROR_MESSAGE);
-//        }
-//        
+        FuncionarioResponsavelGUI funcionarioResponsavel = new FuncionarioResponsavelGUI(1);
+        funcionarioResponsavel.setVisible(true);
     }
-//    
-//    public void abreAdicionarVenda() {
-//        CriarVendaGUI criarVendaGUI = new CriarVendaGUI();
-//        criarVendaGUI.setVisible(true); 
-//    }
+    
+    public void abreAdicionarVenda() {
+        FuncionarioResponsavelGUI funcionarioResponsavel = new FuncionarioResponsavelGUI(2);
+        funcionarioResponsavel.setVisible(true);
+    }
     
     public void abreFuncionario() {
         FuncionariosGUI funcionarios = new FuncionariosGUI();
@@ -448,10 +504,10 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         produtos.setVisible(true); 
     }
     
-//    public void abreVendasProgramadas() {
-//        VendasProgramadasGUI vendasProgramadas = new VendasProgramadasGUI();
-//        vendasProgramadas.setVisible(true); 
-//    }
+    public void abreVendasProgramadas() {
+        VendasProgramadasGUI vendasProgramadas = new VendasProgramadasGUI();
+        vendasProgramadas.setVisible(true); 
+    }
     
     public static void main(String args[]) {
 
@@ -467,10 +523,11 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     private javax.swing.JMenu MnOpcoes;
     private javax.swing.JScrollPane Numero;
     private javax.swing.JScrollPane Numero1;
+    private javax.swing.JScrollPane Numero2;
     private javax.swing.JButton btnAbreFuncionarios;
+    private javax.swing.JButton btnAbrePrevisoes;
     private javax.swing.JButton btnAbreProdutos;
     private javax.swing.JButton btnAbreTransportadoras;
-    private javax.swing.JButton btnAbreVendasProgramadas;
     private javax.swing.JButton btnAddAtualizar;
     private javax.swing.JButton btnAddCompra;
     private javax.swing.JButton btnAddVenda;
@@ -482,11 +539,13 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel labelValor;
     private javax.swing.JTable tbCompras;
     private javax.swing.JTable tbLucros;
+    private javax.swing.JTable tbLucrosAnuais;
     private javax.swing.JTable tbVendas;
     private javax.swing.JScrollPane tbVendas2;
     // End of variables declaration//GEN-END:variables

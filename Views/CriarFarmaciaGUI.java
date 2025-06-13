@@ -20,6 +20,8 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
         cxCNPJ = new javax.swing.JTextField();
         btnCriarFarmacia = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
+        cxSaldo = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -57,10 +59,24 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
             }
         });
 
+        cxSaldo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        cxSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cxSaldoActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel4.setText("Saldo inicial:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(175, 175, 175)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -70,28 +86,29 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
                         .addComponent(btnCriarFarmacia))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cxCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cxCNPJ))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cxNome, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cxSaldo)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(175, 175, 175)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cxNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -99,7 +116,11 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(cxCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(cxSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarFarmacia)
                     .addComponent(btnVoltar))
@@ -123,6 +144,10 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
        login.setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void cxSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSaldoActionPerformed
+
+    }//GEN-LAST:event_cxSaldoActionPerformed
+
     public void fechaAtual(){
         this.dispose();
     }
@@ -140,7 +165,12 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
             return;
         }
         
-        if(farmaciaCtrl.cadastrar(cxNome.getText(), cxCNPJ.getText())){
+        if (cxSaldo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo Saldo Inicial é obrigatório é obrigatório.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(farmaciaCtrl.cadastrar(cxNome.getText(), cxCNPJ.getText(), cxSaldo.getText())){
             JOptionPane.showMessageDialog(this, "Farmacia cadastrada.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
             LoginGUI login = new LoginGUI();
@@ -164,9 +194,11 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField cxCNPJ;
     private javax.swing.JTextField cxNome;
+    private javax.swing.JTextField cxSaldo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 
 }
