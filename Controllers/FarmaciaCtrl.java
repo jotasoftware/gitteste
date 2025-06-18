@@ -58,27 +58,6 @@ public class FarmaciaCtrl {
         }
     }
 
-
-    public ArrayList<SetorListagemDTO> listarSetores() {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            FarmaciaDAO dao = new FarmaciaDAO(conn);
-            return dao.listarSetoresCnpj(Sessao.getIdFarmaciaLogada());
-        } catch (SQLException e) {
-            System.err.println("Erro de banco de dados ao listar setores: " + e.getMessage());
-            return new ArrayList<>(); 
-        }
-    }
-
-    public ArrayList<FuncionarioListagemDTO> listarFuncionarios() {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            FarmaciaDAO dao = new FarmaciaDAO(conn);
-            return dao.listarFuncionariosCnpj(Sessao.getIdFarmaciaLogada());
-        } catch (SQLException e) {
-            System.err.println("Erro de banco de dados ao listar funcionários: " + e.getMessage());
-            return new ArrayList<>();
-        }
-    }
-
     public ArrayList<CompraListagemDTO> listarCompras() {
         try (Connection conn = DatabaseConnection.getConnection()) {
             FarmaciaDAO dao = new FarmaciaDAO(conn);
@@ -115,17 +94,6 @@ public class FarmaciaCtrl {
             return dao.listarLucrosAnuaisCnpj(Sessao.getIdFarmaciaLogada(), buscarFuturo);
         } catch (SQLException e) {
             System.err.println("Erro de banco de dados ao listar lucros: " + e.getMessage());
-            return new ArrayList<>();
-        }
-    }
-
-
-    public ArrayList<Produto> listarProdutos() {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            FarmaciaDAO dao = new FarmaciaDAO(conn);
-            return dao.listarProdutosCnpj(Sessao.getIdFarmaciaLogada());
-        } catch (SQLException e) {
-            System.err.println("Erro de banco de dados ao listar produtos: " + e.getMessage());
             return new ArrayList<>();
         }
     }

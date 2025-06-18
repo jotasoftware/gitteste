@@ -1,8 +1,12 @@
 package Views;
+
 import Controllers.FarmaciaCtrl;
+import Controllers.ProdutoCtrl;
 import Controllers.Sessao;
 import Models.Produto;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 
 public class ProdutosGUI extends javax.swing.JFrame {
@@ -13,6 +17,8 @@ public class ProdutosGUI extends javax.swing.JFrame {
         populaTabelasProdutos();
     }
 
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -192,16 +198,16 @@ public class ProdutosGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddAtualizarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        this.dispose();
         HomeFarmaciaGUI homeFarmacia = new HomeFarmaciaGUI();
         homeFarmacia.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
    
     
     
     private void populaTabelasProdutos() {
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        produtos = farmaciaCtrl.listarProdutos();
+        ProdutoCtrl produtoCtrl = new ProdutoCtrl();
+        produtos = produtoCtrl.listarProdutos();
         DefaultTableModel model1 = (DefaultTableModel) tbProdutos1.getModel();
         DefaultTableModel model2 = (DefaultTableModel) tbProdutos2.getModel();
         model1.setRowCount(0);
@@ -211,16 +217,16 @@ public class ProdutosGUI extends javax.swing.JFrame {
                 model1.addRow(new Object[] {
                     produto.getIdProduto(),
                     produto.getNomeProduto(),
-                    produto.getValorCusto(),
-                    produto.getValorVenda(),
+                    nf.format(produto.getValorCusto()),
+                    nf.format(produto.getValorVenda()),
                     produto.getQtdProduto(),
                 });
             }else{
                 model2.addRow(new Object[] {
                     produto.getIdProduto(),
                     produto.getNomeProduto(),
-                    produto.getValorCusto(),
-                    produto.getValorVenda(),
+                    nf.format(produto.getValorCusto()),
+                    nf.format(produto.getValorVenda()),
                 });
             }
         }  
@@ -244,7 +250,6 @@ public class ProdutosGUI extends javax.swing.JFrame {
     
     public static void main(String args[]) {
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ProdutosGUI().setVisible(true);

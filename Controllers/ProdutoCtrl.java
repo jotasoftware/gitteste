@@ -89,4 +89,14 @@ public class ProdutoCtrl {
             return false;
         }
     }
+    
+    public ArrayList<Produto> listarProdutos() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            ProdutoDAO dao = new ProdutoDAO(conn);
+            return dao.listarProdutosCnpj(Sessao.getIdFarmaciaLogada());
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao listar produtos: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 }

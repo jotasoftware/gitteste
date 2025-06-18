@@ -171,6 +171,7 @@ public class CriarFarmaciaGUI extends javax.swing.JFrame {
         }
         
         if(farmaciaCtrl.cadastrar(cxNome.getText(), cxCNPJ.getText(), cxSaldo.getText())){
+            
             JOptionPane.showMessageDialog(this, "Farmacia cadastrada.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
             LoginGUI login = new LoginGUI();

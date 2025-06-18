@@ -2,10 +2,10 @@ package Views;
 
 import Controllers.ComprasCtrl;
 import Controllers.ProdutoCtrl;
-import Controllers.Sessao;
 import dto.ProdutosCompraListagemDTO;
-import dto.SetorListagemDTO;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,6 +13,7 @@ public class CriarCompraGUI extends javax.swing.JFrame {
     private int idCompra;
     private double total = 0;
     private ArrayList<ProdutosCompraListagemDTO> produtos;
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
     
     public CriarCompraGUI(int idCompra) {
         initComponents();
@@ -192,9 +193,9 @@ public class CriarCompraGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tbProdutosMouseClicked
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        fechaAtual();
         HomeFarmaciaGUI homeFarmacia = new HomeFarmaciaGUI();
         homeFarmacia.setVisible(true);
+        fechaAtual();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     public void fechaAtual(){
@@ -215,7 +216,7 @@ public class CriarCompraGUI extends javax.swing.JFrame {
             model1.addRow(new Object[] {
                 produto.getNomeProduto(),
                 produto.getQtdProduto(),
-                produto.getValorTotal(),
+                nf.format(produto.getValorTotal())
             });
         }
         
@@ -227,7 +228,7 @@ public class CriarCompraGUI extends javax.swing.JFrame {
             System.out.println(produto.getValorTotal());
             total += produto.getValorTotal();
         }
-        jLabelTotal.setText(String.format("R$ %.2f", total));
+        jLabelTotal.setText(nf.format(total));
     }
     
     private void finalizarCompra(){

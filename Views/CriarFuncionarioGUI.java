@@ -1,6 +1,7 @@
 package Views;
-import Controllers.FarmaciaCtrl;
 import Controllers.FuncionarioCtrl;
+import Controllers.SetorCtrl;
+import dto.FuncionarioListagemDTO;
 import dto.SetorListagemDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -9,10 +10,15 @@ import javax.swing.table.DefaultTableModel;
 public class CriarFuncionarioGUI extends javax.swing.JFrame {
     private ArrayList<SetorListagemDTO> setores;
     private int setorSelecionado = 0;
+    private FuncionarioListagemDTO funcionario;
 
-    public CriarFuncionarioGUI() {
+    public CriarFuncionarioGUI(FuncionarioListagemDTO funcionario) {
         initComponents();
         populaTabelaSetores();
+        if(funcionario != null){
+            this.funcionario = funcionario;
+            populaCampos();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -66,7 +72,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         });
 
         btnCriarFuncionario.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        btnCriarFuncionario.setText("Criar Funcionário");
+        btnCriarFuncionario.setText("Salvar");
         btnCriarFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCriarFuncionarioActionPerformed(evt);
@@ -201,7 +207,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cxGeneroActionPerformed
 
     private void btnCriarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarFuncionarioActionPerformed
-        criarFuncionario();
+        salvarFuncionario();
     }//GEN-LAST:event_btnCriarFuncionarioActionPerformed
 
     private void cxSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxSalarioActionPerformed
@@ -209,9 +215,9 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cxSalarioActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        fechaAtual();
         FuncionariosGUI funcionarios = new FuncionariosGUI();
         funcionarios.setVisible(true);
+        fechaAtual();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tbSetoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSetoresMouseClicked
@@ -227,9 +233,15 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         this.dispose();
     }
     
+    private void populaCampos() {
+        cxNome.setText(funcionario.getNomeFuncionario());
+        cxIdade.setText(String.valueOf(funcionario.getIdade()));
+        cxSalario.setText(String.valueOf(funcionario.getSalarioBase()));
+    }
+    
     private void populaTabelaSetores() {
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        setores = farmaciaCtrl.listarSetores();
+        SetorCtrl setorCtrl = new SetorCtrl();
+        setores = setorCtrl.listarSetores();
         DefaultTableModel model1 = (DefaultTableModel) tbSetores.getModel();
         model1.setRowCount(0);
         for (SetorListagemDTO setor : setores) {
@@ -242,7 +254,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
         
     }
     
-    public void criarFuncionario(){
+    public void salvarFuncionario(){
         String generoSelecionado = (String) cxGenero.getSelectedItem();
         FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
 
@@ -266,14 +278,26 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
             return;
         }
         
-        if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), cxSalario.getText(), generoSelecionado, setorSelecionado)){
-            JOptionPane.showMessageDialog(this, "Funcionário cadastrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-            FuncionariosGUI funcionarios = new FuncionariosGUI();
-            funcionarios.setVisible(true);
+        if(funcionario == null){
+            if(funcionarioCtrl.cadastrar(cxNome.getText(), cxIdade.getText(), cxSalario.getText(), generoSelecionado, setorSelecionado)){
+                JOptionPane.showMessageDialog(this, "Funcionário cadastrado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                FuncionariosGUI funcionarios = new FuncionariosGUI();
+                funcionarios.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }else{
-            JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            if(funcionarioCtrl.editar(cxNome.getText(), cxIdade.getText(), cxSalario.getText(), generoSelecionado, setorSelecionado, funcionario.getIdFuncionario())){
+                JOptionPane.showMessageDialog(this, "Funcionário editado.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                FuncionariosGUI funcionarios = new FuncionariosGUI();
+                funcionarios.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(this, "Dados Invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
+            
     }
    
     
@@ -281,7 +305,7 @@ public class CriarFuncionarioGUI extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CriarFuncionarioGUI().setVisible(true);
+                new CriarFuncionarioGUI(null).setVisible(true);
             }
         });
     }

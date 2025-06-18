@@ -2,12 +2,14 @@ package Views;
 import Controllers.VendasCtrl;
 import Controllers.ProdutoCtrl;
 import dto.ProdutosCompraListagemDTO;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Locale;
 
 public class CriarVendaGUI extends javax.swing.JFrame {
     private int idVenda;
@@ -15,6 +17,8 @@ public class CriarVendaGUI extends javax.swing.JFrame {
     private double totalFinal = 0;
     private double desconto = 0;
     private ArrayList<ProdutosCompraListagemDTO> produtos;
+    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
     
     public CriarVendaGUI(int idVenda) {
         initComponents();
@@ -62,6 +66,11 @@ public class CriarVendaGUI extends javax.swing.JFrame {
 
         btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
 
         tbProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -182,11 +191,12 @@ public class CriarVendaGUI extends javax.swing.JFrame {
                         .addComponent(jLabel7))
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(cxDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabelTotalFinal))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cxDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabelTotalFinal)))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddVenda)
@@ -211,6 +221,12 @@ public class CriarVendaGUI extends javax.swing.JFrame {
         aplicarDesconto();
     }//GEN-LAST:event_btnDescontoActionPerformed
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        HomeFarmaciaGUI homeFarmacia = new HomeFarmaciaGUI();
+        homeFarmacia.setVisible(true);
+        fechaAtual();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     public void fechaAtual(){
         this.dispose();
     }
@@ -229,7 +245,7 @@ public class CriarVendaGUI extends javax.swing.JFrame {
             model1.addRow(new Object[] {
                 produto.getNomeProduto(),
                 produto.getQtdProduto(),
-                produto.getValorTotal(),
+                nf.format(produto.getValorTotal())
             });
         }
         
@@ -241,8 +257,8 @@ public class CriarVendaGUI extends javax.swing.JFrame {
         for (ProdutosCompraListagemDTO produto : produtos) {
             total += produto.getValorTotal();
         }
-        jLabelTotal.setText(String.format("R$ %.2f", total));
-        jLabelTotalFinal.setText(String.format("R$ %.2f", total));
+        jLabelTotal.setText(nf.format(total));
+        jLabelTotalFinal.setText(nf.format(total * (1-(desconto/100))));
     }
     
     private void aplicarDesconto() {
@@ -259,8 +275,7 @@ public class CriarVendaGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Digite um desconto entre 0 e 100%.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            jLabelTotalFinal.setText(String.format("R$ %.2f", total * (1-(desconto/100))));
+            jLabelTotalFinal.setText(nf.format(total * (1-(desconto/100))));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Digite um valor numérico válido para o desconto.");
         }

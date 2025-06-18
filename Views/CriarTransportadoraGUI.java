@@ -137,6 +137,8 @@ public class CriarTransportadoraGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarTransportadoraActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        TransportadorasGUI transportadoras = new TransportadorasGUI();
+        transportadoras.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 

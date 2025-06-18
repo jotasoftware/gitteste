@@ -3,8 +3,10 @@ import Controllers.FarmaciaCtrl;
 import Controllers.Sessao;
 import dto.LucroListagemDTO;
 import dto.VendaListagemDTO;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,11 +16,14 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
     private ArrayList<LucroListagemDTO> lucrosMensais;
     private ArrayList<LucroListagemDTO> lucrosAnuais;
     
+     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    
     public VendasProgramadasGUI() {
         initComponents();
         populaTabelas();
     }
 
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -193,17 +198,17 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Numero1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 4, Short.MAX_VALUE)
+                                        .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jLabel7)
                                         .addGap(96, 96, 96))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnAddSetor2)
-                                            .addComponent(Numero3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(Numero3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAddSetor2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -234,8 +239,8 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddSetor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSetor2ActionPerformed
-        fechaAtual();
         abreHomeFarmacia();
+        fechaAtual();
     }//GEN-LAST:event_btnAddSetor2ActionPerformed
 
     private void itMnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnSairActionPerformed
@@ -270,7 +275,7 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
                 venda.getDataVenda(),
                 venda.getNomeFuncionario(),
                 venda.getQtdProdutos(),
-                venda.getValorFinal()
+                nf.format(venda.getValorFinal()),
             });
         } 
     }
@@ -283,7 +288,7 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
         for (LucroListagemDTO lucro : lucrosMensais) {
             model1.addRow(new Object[] {
                 lucro.getData(),
-                lucro.getLucro(),
+                nf.format(lucro.getLucro())
             });
         } 
     }
@@ -296,7 +301,7 @@ public class VendasProgramadasGUI extends javax.swing.JFrame {
         for (LucroListagemDTO lucro : lucrosAnuais) {
             model1.addRow(new Object[] {
                 lucro.getData(),
-                lucro.getLucro(),
+                nf.format(lucro.getLucro())
             });
         } 
     }

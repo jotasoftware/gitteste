@@ -3,9 +3,12 @@ package Controllers;
 import Models.Funcionario;
 import Models.Genero;
 import config.DatabaseConnection;
+import dao.FarmaciaDAO;
 import dao.FuncionarioDAO;
+import dto.FuncionarioListagemDTO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class FuncionarioCtrl {
@@ -31,6 +34,37 @@ public class FuncionarioCtrl {
                 return dao.adicionar(funcionario);
             } catch (SQLException e) {
                 System.err.println("Erro de banco de dados ao cadastrar funcionário: " + e.getMessage());
+                return false;
+            }
+
+        } catch (NumberFormatException e) {
+            System.err.println("Erro de conversão numérica: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            System.err.println("Erro com valor de enum ou argumentos inválidos: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean editar(String nome, String idade, String salario, String genero, int idSetor, int id) {
+        try {
+            int idadeInt = Integer.parseInt(idade);
+            double salarioDouble = Double.parseDouble(salario.replace(",", ".")); 
+
+            if (nome == null || nome.trim().isEmpty() || idadeInt <= 0 || salarioDouble <= 0) {
+                return false;
+            }
+
+            Genero generoEnum = Genero.valueOf(genero);
+
+            Funcionario funcionario = new Funcionario(nome, idadeInt, salarioDouble, generoEnum, idSetor, Sessao.getIdFarmaciaLogada());
+            funcionario.setID(id);
+            
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                FuncionarioDAO dao = new FuncionarioDAO(conn);
+                return dao.editar(funcionario);
+            } catch (SQLException e) {
+                System.err.println("Erro de banco de dados ao editar funcionário: " + e.getMessage());
                 return false;
             }
 
@@ -69,6 +103,26 @@ public class FuncionarioCtrl {
     
     public double getSalarioLiquido(double salario) {
         return salario - getImposto(salario);
+    }
+    
+    public ArrayList<FuncionarioListagemDTO> listarFuncionarios() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            FuncionarioDAO dao = new FuncionarioDAO(conn);
+            return dao.listarFuncionariosCnpj(Sessao.getIdFarmaciaLogada());
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao listar funcionários: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+    
+    public ArrayList<FuncionarioListagemDTO> listarResponsaveis(int tipo) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            FuncionarioDAO dao = new FuncionarioDAO(conn);
+            return dao.listarResponsaveis(Sessao.getIdFarmaciaLogada(), tipo);
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao listar funcionários: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 }    
 

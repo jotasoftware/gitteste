@@ -172,6 +172,8 @@ public class TransportadorasGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddAtualizarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        HomeFarmaciaGUI homeFarmacia = new HomeFarmaciaGUI();
+        homeFarmacia.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 

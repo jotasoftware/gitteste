@@ -4,7 +4,6 @@
  */
 package Views;
 import Controllers.ComprasCtrl;
-import Controllers.FarmaciaCtrl;
 import Controllers.FuncionarioCtrl;
 import Controllers.Sessao;
 import Controllers.VendasCtrl;
@@ -24,8 +23,8 @@ public class FuncionarioResponsavelGUI extends javax.swing.JFrame {
     
     public FuncionarioResponsavelGUI(int tipo) {
         initComponents();
-        populaTabela();
         this.tipo = tipo;
+        populaTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -49,17 +48,17 @@ public class FuncionarioResponsavelGUI extends javax.swing.JFrame {
 
         tbFuncionarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Nome", "Setor"
+                "Id", "Nome", "Setor"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -72,6 +71,12 @@ public class FuncionarioResponsavelGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tbFuncionarios);
+        if (tbFuncionarios.getColumnModel().getColumnCount() > 0) {
+            tbFuncionarios.getColumnModel().getColumn(0).setResizable(false);
+            tbFuncionarios.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tbFuncionarios.getColumnModel().getColumn(1).setResizable(false);
+            tbFuncionarios.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         btnProximo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnProximo.setText("Proximo");
@@ -147,16 +152,19 @@ public class FuncionarioResponsavelGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_itMnSairActionPerformed
 
     private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximoActionPerformed
-        if(tipo ==1){
+        if(!funcionarios.isEmpty()){
+           if(tipo ==1){
             abreCriarCompra();
-        }else{
-            abreCriarVenda();
+            }else{
+                abreCriarVenda();
+            }
         }
+        
     }//GEN-LAST:event_btnProximoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        fechaAtual();
         abreHomeFarmacia();
+        fechaAtual();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tbFuncionariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFuncionariosMouseClicked
@@ -173,17 +181,20 @@ public class FuncionarioResponsavelGUI extends javax.swing.JFrame {
     }
     
     private void populaTabela() {
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        funcionarios = farmaciaCtrl.listarFuncionarios();
+        FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
+        funcionarios = funcionarioCtrl.listarResponsaveis(tipo);
         DefaultTableModel model1 = (DefaultTableModel) tbFuncionarios.getModel();
         model1.setRowCount(0);
         for (FuncionarioListagemDTO funcionario : funcionarios) {
             model1.addRow(new Object[] {
+                funcionario.getIdFuncionario(),
                 funcionario.getNomeFuncionario(),
                 funcionario.getNomeSetor(),
             });
         }
-        
+        if(funcionarios.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Sem responsáveis " + (tipo == 1? "pelo almoxarifado" : " pelas vendas") + " para listar", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void abreCriarVenda() {

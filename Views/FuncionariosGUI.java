@@ -1,28 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Views;
 import Controllers.FarmaciaCtrl;
 import Controllers.FuncionarioCtrl;
 import Controllers.Sessao;
+import Controllers.SetorCtrl;
+import config.DatabaseConnection;
+import dao.FarmaciaDAO;
 import dto.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author joaopedro
- */
 public class FuncionariosGUI extends javax.swing.JFrame {
     private ArrayList<SetorListagemDTO> setores;
     private ArrayList<FuncionarioListagemDTO> funcionarios;
+    private double plr;
+    private LucroListagemDTO lucroAtual;
     
     public FuncionariosGUI() {
         initComponents();
         populaTabelas();
+        plr = 0;
     }
+    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -224,58 +228,69 @@ public class FuncionariosGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddFuncionarioActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        fechaAtual();
         abreHomeFarmacia();
+        fechaAtual();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tbFuncionariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFuncionariosMouseClicked
         int linhaSelecionada = tbFuncionarios.getSelectedRow();
         FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
 
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         if (linhaSelecionada != -1) {
             FuncionarioListagemDTO funcionario = funcionarios.get(linhaSelecionada);
 
             String mensagem = String.format(
-                "ID: %d\n" +
-                "Nome: %s\n" +
-                "Setor: %s\n" +
-                "Vale Transporte: %s\n" +
-                "Vale Refeição: %s\n" +
-                "Vale Alimentação: %s\n" +
-                "Plano de Saúde: %s\n" +
-                "Plano Odontológico: %s\n" +
-                "Salário Bruto: R$ %.2f\n" +
-                "Imposto: R$ %.2f\n" +
-                "Salário Líquido: R$ %.2f\n" +
-                "Deseja excluir este funcionário?\n",
-                funcionario.getIdFuncionario(),
-                funcionario.getNomeFuncionario(),
-                funcionario.getNomeSetor(),
-                funcionario.getValeTransporte(),
-                funcionario.getValeRefeicao(),
-                funcionario.getValeAlimentacao(),
-                funcionario.getPlanoSaude(),
-                funcionario.getPlanoOdontologico(),
-                funcionario.getSalarioBase(),
-                funcionarioCtrl.getImposto(funcionario.getSalarioBase()),
-                funcionarioCtrl.getSalarioLiquido(funcionario.getSalarioBase())
-            );
+                                "ID: %d\n" +
+                                "Nome: %s\n" +
+                                "Idade: %s\n" +
+                                "Setor: %s\n" +
+                                "Vale Transporte: %s\n" +
+                                "Vale Refeição: %s\n" +
+                                "Vale Alimentação: %s\n" +
+                                "Plano de Saúde: %s\n" +
+                                "Plano Odontológico: %s\n" +
+                                "Salário Bruto: %s\n" +
+                                "Imposto: %s\n" +
+                                "Salário Líquido: %s\n" +
+                                "PLR Estimado: %s\n" + 
+                                "Deseja excluir este funcionário?\n",
+                                funcionario.getIdFuncionario(),
+                                funcionario.getNomeFuncionario(),
+                                funcionario.getIdade(),
+                                funcionario.getNomeSetor(),
+                                nf.format(funcionario.getValeTransporte()),
+                                nf.format(funcionario.getValeRefeicao()),
+                                nf.format(funcionario.getValeAlimentacao()),
+                                nf.format(funcionario.getPlanoSaude()),
+                                nf.format(funcionario.getPlanoOdontologico()),
+                                nf.format(funcionario.getSalarioBase()),
+                                nf.format(funcionarioCtrl.getImposto(funcionario.getSalarioBase())),
+                                nf.format(funcionarioCtrl.getSalarioLiquido(funcionario.getSalarioBase())),
+                                nf.format(this.calcularPlr(funcionario.getSalarioBase()))
+                            );
 
-            int resposta = JOptionPane.showConfirmDialog(
+            Object[] opcoes = {"Excluir", "Editar", "Cancelar"};
+            int resposta = JOptionPane.showOptionDialog(
                 this,
                 mensagem,
-                "Confirmação de Exclusão",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
+                "Confirmação de Ação",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                opcoes,
+                opcoes[2]
             );
 
-            if (resposta == JOptionPane.YES_OPTION) {
-                if(funcionarioCtrl.apagar(funcionario.getIdFuncionario())){
+            if(resposta == 0){ 
+                if (funcionarioCtrl.apagar(funcionario.getIdFuncionario())) {
                     JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
                     populaTabelas();
                 }
+            }else if (resposta == 1) {
+                CriarFuncionarioGUI criarFuncionario = new CriarFuncionarioGUI(funcionario);
+                criarFuncionario.setVisible(true);
             }
-
         }
     }//GEN-LAST:event_tbFuncionariosMouseClicked
 
@@ -290,38 +305,53 @@ public class FuncionariosGUI extends javax.swing.JFrame {
     }
 
     private void populaTabelaSetores() {
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        setores = farmaciaCtrl.listarSetores();
+        SetorCtrl setorCtrl = new SetorCtrl();
+        setores = setorCtrl.listarSetores();
         DefaultTableModel model1 = (DefaultTableModel) tbSetores.getModel();
         model1.setRowCount(0);
         for (SetorListagemDTO setor : setores) {
             model1.addRow(new Object[] {
                 setor.getNome(),
                 setor.getQtdFuncionarios(),
-                setor.getValeTransporte(),
-                setor.getValeRefeicao(),
-                setor.getValeAlimentacao(),
-                setor.getPlanoSaude(),
-                setor.getPlanoOdontologico()
+                nf.format(setor.getValeTransporte()),
+                nf.format(setor.getValeRefeicao()),
+                nf.format(setor.getValeAlimentacao()),
+                nf.format(setor.getPlanoSaude()),
+                nf.format(setor.getPlanoOdontologico()),
             });
         }
         
     }
     
     private void populaTabelaFuncionarios() {
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        funcionarios = farmaciaCtrl.listarFuncionarios();
+        FuncionarioCtrl funcionarioCtrl = new FuncionarioCtrl();
+        funcionarios = funcionarioCtrl.listarFuncionarios();
         DefaultTableModel model1 = (DefaultTableModel) tbFuncionarios.getModel();
         model1.setRowCount(0);
         for (FuncionarioListagemDTO funcionario : funcionarios) {
             model1.addRow(new Object[] {
                 funcionario.getIdFuncionario(),
                 funcionario.getNomeFuncionario(),
-                funcionario.getSalarioBase(),
+                nf.format(funcionario.getSalarioBase()),
                 funcionario.getNomeSetor(),
             });
         }
         
+    }
+    
+    private double calcularPlr(double salario) {
+        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
+        ArrayList<LucroListagemDTO> lista = farmaciaCtrl.listarLucrosAnuais(true);
+        LucroListagemDTO primeiroLucro = lista.get(0);
+        double lucroAnual = primeiroLucro.getLucro();
+        double somaSalarios = 0.0;
+        for (FuncionarioListagemDTO funcionario : funcionarios) {
+            somaSalarios += funcionario.getSalarioBase();
+        }
+        double percentualPlr = 0.10;
+        double plrTotal = lucroAnual * percentualPlr;
+        double plrFuncionario = (salario / somaSalarios) * plrTotal;
+        return plrFuncionario;
     }
     
     private void abreAdicionarSetor() {
@@ -330,7 +360,7 @@ public class FuncionariosGUI extends javax.swing.JFrame {
     }
     
     private void abreAdicionarFuncionario() {
-        CriarFuncionarioGUI criarFuncionarioGUI = new CriarFuncionarioGUI();
+        CriarFuncionarioGUI criarFuncionarioGUI = new CriarFuncionarioGUI(null);
         criarFuncionarioGUI.setVisible(true); 
     }  
 

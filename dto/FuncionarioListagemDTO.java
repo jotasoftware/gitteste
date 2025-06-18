@@ -4,6 +4,7 @@ public class FuncionarioListagemDTO {
     
     private int idFuncionario;
     private String nomeFuncionario;
+    private int idade;
     private double salarioBase;
     private String nomeSetor;
     private double valeTransporte;
@@ -18,6 +19,7 @@ public class FuncionarioListagemDTO {
         this.idFuncionario = 0;
         this.nomeFuncionario = "";
         this.salarioBase = 0.0;
+        this.idade = 0;
         this.nomeSetor = "";
         this.valeTransporte = 0.0;
         this.valeRefeicao = 0.0;
@@ -36,6 +38,18 @@ public class FuncionarioListagemDTO {
     public int getIdFuncionario() {
      
         return idFuncionario;
+
+    }
+    
+    public void setIdade(int idade) {
+     
+        this.idade = idade;
+
+    }
+
+    public int getIdade() {
+     
+        return idade;
 
     }
 

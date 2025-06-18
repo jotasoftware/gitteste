@@ -58,6 +58,11 @@ public class CriarSetorGUI extends javax.swing.JFrame {
 
         btnVoltar.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
 
         cxValeRefeicao.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
 
@@ -193,6 +198,12 @@ public class CriarSetorGUI extends javax.swing.JFrame {
     private void cxPlanoOdontologicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cxPlanoOdontologicoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cxPlanoOdontologicoActionPerformed
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        FuncionariosGUI funcionario = new FuncionariosGUI();
+        funcionario.setVisible(true);
+        fechaAtual();
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
     public void fechaAtual(){
         this.dispose();

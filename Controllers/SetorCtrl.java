@@ -2,9 +2,12 @@ package Controllers;
 
 import Models.Setor;
 import config.DatabaseConnection;
+import dao.FarmaciaDAO;
 import dao.SetorDAO;
+import dto.SetorListagemDTO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class SetorCtrl {
@@ -15,34 +18,44 @@ public class SetorCtrl {
     }
 
     public boolean cadastrarSetor(String nomeSetor, String vt, String vr, String va, String ps, String po) {
-    try {
-        double valeTransporte = Double.parseDouble(vt.replace(",", "."));
-        double valeRefeicao = Double.parseDouble(vr.replace(",", "."));
-        double valeAlimentacao = Double.parseDouble(va.replace(",", "."));
-        double planoDeSaude = Double.parseDouble(ps.replace(",", "."));
-        double planoOdontologico = Double.parseDouble(po.replace(",", "."));
+        try {
+            double valeTransporte = Double.parseDouble(vt.replace(",", "."));
+            double valeRefeicao = Double.parseDouble(vr.replace(",", "."));
+            double valeAlimentacao = Double.parseDouble(va.replace(",", "."));
+            double planoDeSaude = Double.parseDouble(ps.replace(",", "."));
+            double planoOdontologico = Double.parseDouble(po.replace(",", "."));
 
-        if (nomeSetor == null || nomeSetor.trim().isEmpty() ||
-            valeTransporte < 0 || valeRefeicao < 0 || valeAlimentacao < 0 || planoDeSaude < 0) {
+            if (nomeSetor == null || nomeSetor.trim().isEmpty() ||
+                valeTransporte < 0 || valeRefeicao < 0 || valeAlimentacao < 0 || planoDeSaude < 0) {
+                return false;
+            }
+
+            Setor setor = new Setor(Sessao.getIdFarmaciaLogada(), nomeSetor, valeTransporte, valeRefeicao, valeAlimentacao, planoDeSaude, planoOdontologico);
+
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                SetorDAO dao = new SetorDAO(conn);
+                return dao.criarSetor(setor);
+            } catch (SQLException e) {
+                System.err.println("Erro de banco de dados ao cadastrar setor: " + e.getMessage());
+                return false;
+            }
+
+        } catch (NumberFormatException e) {
+            System.err.println("Erro de conversão de número: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao cadastrar setor: " + e.getMessage());
             return false;
         }
-
-        Setor setor = new Setor(Sessao.getIdFarmaciaLogada(), nomeSetor, valeTransporte, valeRefeicao, valeAlimentacao, planoDeSaude, planoOdontologico);
-
+    }
+    
+    public ArrayList<SetorListagemDTO> listarSetores() {
         try (Connection conn = DatabaseConnection.getConnection()) {
             SetorDAO dao = new SetorDAO(conn);
-            return dao.criarSetor(setor);
+            return dao.listarSetoresCnpj(Sessao.getIdFarmaciaLogada());
         } catch (SQLException e) {
-            System.err.println("Erro de banco de dados ao cadastrar setor: " + e.getMessage());
-            return false;
+            System.err.println("Erro de banco de dados ao listar setores: " + e.getMessage());
+            return new ArrayList<>(); 
         }
-
-    } catch (NumberFormatException e) {
-        System.err.println("Erro de conversão de número: " + e.getMessage());
-        return false;
-    } catch (Exception e) {
-        System.err.println("Erro inesperado ao cadastrar setor: " + e.getMessage());
-        return false;
     }
-}
 }

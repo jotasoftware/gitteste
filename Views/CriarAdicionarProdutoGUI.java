@@ -1,11 +1,13 @@
 package Views;
 import Controllers.ComprasCtrl;
 import Controllers.FarmaciaCtrl;
-import Controllers.FuncionarioCtrl;
+import Controllers.ProdutoCtrl;
 import Controllers.VendasCtrl;
 import Models.Produto;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 
 public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
@@ -16,6 +18,8 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
     private Produto produtoSelecionado;
     int idProduto;
     int quantidadeProduto;
+    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     public CriarAdicionarProdutoGUI(int tipo, int id) {
         initComponents();
@@ -150,17 +154,17 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
     }
     
     public void populaComboBoxCompra(){
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        produtos = farmaciaCtrl.listarProdutos();
+        ProdutoCtrl produtoCtrl = new ProdutoCtrl();
+        produtos = produtoCtrl.listarProdutos();
 
         for (Produto produto : produtos) {
-            comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto() + " unidades");
+            comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto() + " unidades - "  + nf.format(produto.getValorCusto()));
         }
     }
     
     public void populaComboBoxVenda(){
-        FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
-        produtos = farmaciaCtrl.listarProdutos();
+        ProdutoCtrl produtoCtrl = new ProdutoCtrl();
+        produtos = produtoCtrl.listarProdutos();
 
         for (Produto produto : produtos) {
             if(produto.getQtdProduto() > 0){
@@ -169,8 +173,7 @@ public class CriarAdicionarProdutoGUI extends javax.swing.JFrame {
         }
         
         for (Produto produto : produtosVenda) {
-            comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto()+ " unidades");
-
+            comboBoxProdutos.addItem(produto.getNomeProduto() + " - " + produto.getQtdProduto()+ " unidades- "  + nf.format(produto.getValorVenda()));
         }
     }
     

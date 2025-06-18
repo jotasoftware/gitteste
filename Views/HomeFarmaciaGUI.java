@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Views;
 import Controllers.Sessao;
 import Controllers.FarmaciaCtrl;
 import dto.*;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.Locale;
 
 public class HomeFarmaciaGUI extends javax.swing.JFrame {
     FarmaciaCtrl farmaciaCtrl = new FarmaciaCtrl();
@@ -16,7 +16,10 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     private ArrayList<VendaListagemDTO> vendas;
     private ArrayList<LucroListagemDTO> lucros;
     private ArrayList<LucroListagemDTO> lucrosAnuais;
+    private ArrayList<VendaListagemDTO> vendasPassadas;
     private double saldoAtual;
+    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
     
     public HomeFarmaciaGUI() {
         initComponents();
@@ -54,8 +57,6 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         MnOpcoes = new javax.swing.JMenu();
-        itMnPerfil = new javax.swing.JMenuItem();
-        itMnEditar = new javax.swing.JMenuItem();
         itMnSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -80,6 +81,14 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
             }
         });
         Numero.setViewportView(tbCompras);
+        if (tbCompras.getColumnModel().getColumnCount() > 0) {
+            tbCompras.getColumnModel().getColumn(0).setResizable(false);
+            tbCompras.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tbCompras.getColumnModel().getColumn(1).setResizable(false);
+            tbCompras.getColumnModel().getColumn(2).setResizable(false);
+            tbCompras.getColumnModel().getColumn(3).setResizable(false);
+            tbCompras.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
         jLabel1.setText("Tela inicial");
@@ -114,6 +123,14 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
             }
         });
         tbVendas2.setViewportView(tbVendas);
+        if (tbVendas.getColumnModel().getColumnCount() > 0) {
+            tbVendas.getColumnModel().getColumn(0).setResizable(false);
+            tbVendas.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tbVendas.getColumnModel().getColumn(1).setResizable(false);
+            tbVendas.getColumnModel().getColumn(2).setResizable(false);
+            tbVendas.getColumnModel().getColumn(3).setResizable(false);
+            tbVendas.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel3.setText("Vendas");
@@ -163,6 +180,7 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
 
         labelValor.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         labelValor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelValor.setText("Valor");
 
         btnAbrePrevisoes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnAbrePrevisoes.setText("Previsões");
@@ -233,22 +251,6 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
 
         MnOpcoes.setText("Opcões");
 
-        itMnPerfil.setText("Perfil");
-        itMnPerfil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itMnPerfilActionPerformed(evt);
-            }
-        });
-        MnOpcoes.add(itMnPerfil);
-
-        itMnEditar.setText("Editar");
-        itMnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itMnEditarActionPerformed(evt);
-            }
-        });
-        MnOpcoes.add(itMnEditar);
-
         itMnSair.setText("Sair");
         itMnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,34 +280,33 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
                         .addComponent(btnAbrePrevisoes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAddAtualizar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(labelValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel5)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(Numero1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(Numero, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnAddCompra)))
-                                        .addGap(21, 21, 21)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(214, 214, 214)
-                                                .addComponent(btnAddVenda))
-                                            .addComponent(tbVendas2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelValor, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(Numero1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(Numero, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnAddCompra)))
+                                    .addGap(21, 21, 21)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel3)
+                                            .addGap(214, 214, 214)
+                                            .addComponent(btnAddVenda))
+                                        .addComponent(tbVendas2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(Numero2))
                 .addContainerGap())
         );
@@ -348,10 +349,6 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void itMnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnPerfilActionPerformed
-
-    }//GEN-LAST:event_itMnPerfilActionPerformed
-
     private void itMnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnSairActionPerformed
         fechaAtual();
         sair();
@@ -361,10 +358,6 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         populaTabelas();
         atualizaSaldo();
     }//GEN-LAST:event_btnAddAtualizarActionPerformed
-
-    private void itMnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itMnEditarActionPerformed
-
-    }//GEN-LAST:event_itMnEditarActionPerformed
 
     private void btnAddVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVendaActionPerformed
         abreAdicionarVenda();
@@ -407,28 +400,39 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         compras = farmaciaCtrl.listarCompras();
         DefaultTableModel model1 = (DefaultTableModel) tbCompras.getModel();
         model1.setRowCount(0);
+        
         for (CompraListagemDTO compra : compras) {
             model1.addRow(new Object[] {
                 compra.getIdCompra(),
                 compra.getDataCompra(),
                 compra.getNomeFuncionario(),
                 compra.getQtdProdutos(),
-                compra.getValorFinal()
+                nf.format(compra.getValorFinal())
             });
         } 
     }
     
     private void populaTabelaVenda() {
         vendas = farmaciaCtrl.listarVendas();
+        vendas = farmaciaCtrl.listarVendas();
+        vendasPassadas = new ArrayList<>();
+        LocalDate hoje = LocalDate.now();
+
+        for (VendaListagemDTO venda : vendas) {
+            if (!venda.getDataVenda().isAfter(hoje)) {
+                vendasPassadas.add(venda);
+            }
+        }
+
         DefaultTableModel model1 = (DefaultTableModel) tbVendas.getModel();
         model1.setRowCount(0);
-        for (VendaListagemDTO venda : vendas) {
+        for (VendaListagemDTO venda : vendasPassadas) {
             model1.addRow(new Object[] {
                 venda.getIdVenda(),
                 venda.getDataVenda(),
                 venda.getNomeFuncionario(),
                 venda.getQtdProdutos(),
-                venda.getValorFinal()
+                nf.format(venda.getValorFinal())
             });
         } 
     }
@@ -440,9 +444,9 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         for (LucroListagemDTO lucro : lucros) {
             model1.addRow(new Object[] {
                 lucro.getData(),
-                lucro.getSomatorioCompra(),
-                lucro.getSomatorioVenda(),
-                lucro.getLucro(),
+                nf.format(lucro.getSomatorioCompra()),
+                nf.format(lucro.getSomatorioVenda()),
+                nf.format(lucro.getLucro())
             });
         } 
     }
@@ -454,9 +458,9 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         for (LucroListagemDTO lucro : lucrosAnuais) {
             model1.addRow(new Object[] {
                 lucro.getData(),
-                lucro.getSomatorioCompra(),
-                lucro.getSomatorioVenda(),
-                lucro.getLucro(),
+                nf.format(lucro.getSomatorioCompra()),
+                nf.format(lucro.getSomatorioVenda()),
+                nf.format(lucro.getLucro())
             });
         } 
     }
@@ -466,7 +470,7 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
         for (LucroListagemDTO lucro : lucros) {
             saldoAtual += lucro.getLucro();
         } 
-        labelValor.setText(String.format("R$ %.2f", saldoAtual));
+        labelValor.setText(nf.format(saldoAtual));
     }
     
     public void fechaAtual(){
@@ -531,8 +535,6 @@ public class HomeFarmaciaGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnAddAtualizar;
     private javax.swing.JButton btnAddCompra;
     private javax.swing.JButton btnAddVenda;
-    private javax.swing.JMenuItem itMnEditar;
-    private javax.swing.JMenuItem itMnPerfil;
     private javax.swing.JMenuItem itMnSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

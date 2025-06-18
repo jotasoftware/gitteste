@@ -3,6 +3,7 @@ package dao;
 import Models.Produto;
 import dto.ProdutosCompraListagemDTO;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ProdutoDAO {
     private final Connection connection;
@@ -61,5 +62,29 @@ public class ProdutoDAO {
             System.err.println("Falha ao remover o produto: " + e.getMessage());
             return false;
         }
+    }
+    
+    public ArrayList<Produto> listarProdutosCnpj(int idFarmacia) {
+        ArrayList<Produto> produtos = new ArrayList<>();
+        String sql = "SELECT idProduto, nomeProduto, valorVenda, valorCusto, quantidade " +
+                     "FROM Produto WHERE idFarmacia = ?";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setInt(1, idFarmacia);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto produto = new Produto();
+                    produto.setIdProduto(rs.getInt("idProduto"));
+                    produto.setNomeProduto(rs.getString("nomeProduto"));
+                    produto.setValorVenda(rs.getDouble("valorVenda"));
+                    produto.setValorCusto(rs.getDouble("valorCusto"));
+                    produto.setQtdProduto(rs.getInt("quantidade"));
+                    produtos.add(produto);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar produtos da farmácia: " + e.getMessage());
+        }
+        return produtos;
     }
 }
